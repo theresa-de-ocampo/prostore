@@ -4,7 +4,13 @@ export const metadata = {
   title: "Home"
 };
 
-export default function Home() {
+async function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export default async function Home() {
+  await sleep(3_000);
+
   return (
     <main>
       <p className="font-inter">ProStore</p>
