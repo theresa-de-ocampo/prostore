@@ -21,3 +21,7 @@ To apply the font, use `fontFamily.variable` or simply `font-fontFamily` if you'
 ### Theme Mode Toggle
 
 Encountered the hydration error whenever I'm changing the theme even though I've already set `use client`. This is because **client components** are still **server rendered**, read more at [If using <<use client>> in all components. Why use Next.js at all?](https://www.reddit.com/r/nextjs/comments/1c80rfp/if_using_use_client_in_all_components_why_use/)
+
+## Responsive Sheet Menu
+
+`@layer utilities` is now [deprecated](https://tailwindcss.com/docs/upgrade-guide#adding-custom-utilities). Custom classes would not work when applying responsive prefixes like `md:flex-start`.

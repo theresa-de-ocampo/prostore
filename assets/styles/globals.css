@@ -115,25 +115,24 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
 }
 
-@layer utilities {
-  .wrapper {
-    @apply p-5 md:px-10;
-  }
+@utility wrapper {
+  @apply p-5 md:px-10;
+}
 
-  .flex-start {
-    @apply flex justify-start items-center;
-  }
+@utility flex-start {
+  @apply flex justify-start items-center;
+}
 
-  .flex-center {
-    @apply flex justify-center items-center;
-  }
+@utility flex-center {
+  @apply flex justify-center items-center;
+}
 
-  .flex-between {
-    @apply flex justify-between items-center;
-  }
+@utility flex-between {
+  @apply flex justify-between items-center;
 }
