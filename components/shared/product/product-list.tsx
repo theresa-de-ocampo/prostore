@@ -1,3 +1,5 @@
+import ProductCard from "./product-card";
+
 export default function ProductList({
   data,
   title,
@@ -13,9 +15,9 @@ export default function ProductList({
     <div className="my-10">
       <h2 className="text-2xl font-bold">{title}</h2>
       {limitedData.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 my-4">
           {limitedData.map((product: any) => (
-            <p key={product.slug}>{product.name}</p>
+            <ProductCard key={product.slug} product={product} />
           ))}
         </div>
       ) : (
