@@ -31,7 +31,9 @@ export default function ProductCard({ product }: { product: any }) {
       <CardFooter className="flex-between">
         <p>{product.rating} Stars</p>
         {product.stock ? (
-          <ProductPrice value={product.price} />
+          // TODO: Will be fixed in later videos
+          // https://discord.com/channels/1072292915306577940/1325518943221321739/1325518943221321739
+          <ProductPrice value={parseFloat(product.price)} />
         ) : (
           <p className="text-destructive">Out of Stock</p>
         )}
