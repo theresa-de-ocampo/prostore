@@ -1,0 +1,33 @@
+import { z } from "zod";
+import { formatDecimal } from "./utils";
+
+const nullableString = z
+  .string()
+  .trim()
+  .nullable()
+  .default(null)
+  .transform((s) => (s === "" ? null : s));
+
+const money = z
+  .string()
+  .refine((value) => /^\d+(\.\d{2})?$/.test(formatDecimal(value)));
+
+export const productSchema = z.object({
+  id: z.uuid(),
+  name: z.string().trim().min(3, "Product name must be at least 3 characters."),
+  slug: z.string().trim().min(3, "Slug must be at least 3 characters."),
+  category: z.string().trim().min(3),
+  description: z.string().trim().min(3),
+  images: z
+    .array(z.string().trim().min(4))
+    .min(1, "Product must have at least one image."),
+  price: money,
+  brand: z.string().trim().min(3),
+  rating: z
+    .string()
+    .refine((value) => /^\d\.\d$/.test(formatDecimal(value, 1))),
+  stock: z.coerce.number().int(),
+  isFeatured: z.boolean().default(false),
+  banner: nullableString,
+  createdAt: z.iso.datetime()
+});
