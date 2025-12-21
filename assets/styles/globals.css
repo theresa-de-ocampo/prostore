@@ -121,6 +121,10 @@
   }
 }
 
+h2 {
+  @apply font-bold text-xl lg:text-2xl;
+}
+
 @utility wrapper {
   @apply p-5 md:px-10;
 }

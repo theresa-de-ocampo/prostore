@@ -4,6 +4,7 @@ import ProductPrice from "@/components/shared/product/product-price";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import ProductImages from "@/components/shared/product/product-images";
 
 export default async function ProductDetailsPage(props: {
   params: Promise<{ slug: string }>;
@@ -17,7 +18,8 @@ export default async function ProductDetailsPage(props: {
   }
 
   return (
-    <section className="grid grid-cols-1 md:grid-cols-5">
+    <section className="grid grid-cols-1 gap-3 md:grid-cols-5">
+      <ProductImages images={product.images} />
       <section className="col-span-2 flex flex-col gap-5">
         <p>
           {product.brand} {product.category}
@@ -30,7 +32,7 @@ export default async function ProductDetailsPage(props: {
           value={parseFloat(product.price)}
           className="w-max rounded-full bg-green-100 text-green-700 px-5 py-2"
         />
-        <div className="mt-10">
+        <div>
           <p className="font-bold">Description:</p>
           <p>{product.description}</p>
         </div>
