@@ -12,9 +12,9 @@ export default function ProductPrice({
 
   return (
     <div className={cn("text-2xl", className)}>
-      <sup>&#36;</sup>
-      <span className="font-bold">{wholeNumber}</span>
-      <sup>.{fractionalPart}</sup>
+      <sup className="text-sm">&#36;</sup>
+      <span className="font-medium">{wholeNumber}</span>
+      <sup className="text-sm">.{fractionalPart}</sup>
     </div>
   );
 }

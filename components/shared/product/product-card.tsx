@@ -13,7 +13,7 @@ export default function ProductCard({ product }: { product: Product }) {
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
-        <Link href={product.slug}>
+        <Link href={`product/${product.slug}`}>
           <Image
             src={product.images[0]}
             alt={product.name}
@@ -25,7 +25,7 @@ export default function ProductCard({ product }: { product: Product }) {
       </CardHeader>
       <CardContent>
         <p className="text-xs">{product.brand}</p>
-        <Link href={product.slug}>
+        <Link href={`product/${product.slug}`}>
           <h3 className="text-sm font-medium">{product.name}</h3>
         </Link>
       </CardContent>

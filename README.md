@@ -1,10 +1,10 @@
-# 1. Next.js 15: Looking at What's New
+# Next.js 15: Looking at What's New
 
 A personal dev log as I revisit and upgrade my Next.js skills through [Brad Traversy's Tutorial](https://www.traversymedia.com/nextjs-ecommerce).
 
 ## 2. App Creation & Basic Layout
 
-### Create Next App & Assets
+### 2.1. Create Next App & Assets
 
 #### Fonts
 
@@ -18,11 +18,11 @@ After you've loaded the font, the variable must be available in the CSS scope - 
 
 To apply the font, use `fontFamily.variable` or simply `font-fontFamily` if you've already set up the font theme in Tailwind.
 
-### Theme Mode Toggle
+### 2.2. Theme Mode Toggle
 
 Encountered the hydration error whenever I'm changing the theme even though I've already set `use client`. This is because **client components** are still **server rendered**, read more at [If using `use client` in all components. Why use Next.js at all?](https://www.reddit.com/r/nextjs/comments/1c80rfp/if_using_use_client_in_all_components_why_use/)
 
-### Responsive Sheet Menu
+### 2.3. Responsive Sheet Menu
 
 `@layer utilities` is now [deprecated](https://tailwindcss.com/docs/upgrade-guide#adding-custom-utilities). Custom classes would not work when applying responsive prefixes like `md:flex-start`.
 
@@ -36,16 +36,16 @@ Encountered the hydration error whenever I'm changing the theme even though I've
 6. `npx prisma studio`
 7. `npx tsx ./db/seed`
 
-### API Routes vs Server Actions
+### 3.1. API Routes vs Server Actions
 
 Mobile Apps
 
-### Fetching from the Prisma Database
+### 3.2. Fetching from the Prisma Database
 
 - What the Prisma client returns initially is a Prisma object that's why you have to convert it first.
 - By default, layouts and pages are server components which lets you fetch data and render parts of your UI on the server. That's why `getLatestProducts` was not placed inside a `useEffect`.
 
-### [Serverless Environment Configuration](https://neon.com/docs/serverless/serverless-driver)
+### 3.3. [Serverless Environment Configuration](https://neon.com/docs/serverless/serverless-driver)
 
 Traditional databases maintain persistent TCP connections to handle requests. However, serverless environments (like Vercel) are designed to scale automatically and don’t maintain persistent connections between invocations. If you try to connect directly to a database from a serverless function (actions or `pages/api`), you might run into issues like:
 
@@ -63,7 +63,14 @@ The Neon adapter solves these problems by adapting Prisma’s behavior to Neon�
 - `npm i @types/ws --save-dev`
 - `npm i bufferutil --save-dev`
 
+#### What happens if you don't use `.$extends`?
+
+It will throw `Type 'Decimal' is not assignable to type 'string'`. Note that even if you change the type of the price to a number in the Zod schema, it will then throw `Type 'Decimal' is not assignable to type 'number'`. Keep in mind that Prisma uses **Decimal.js**.
+
+### 3.4. Product Details Page
+
+Aside from using `props.params`, you can also use `useRouter`.
+
 ## TO DO
 
 - Upgrade to Next.js 16
-- Upgrade to Prisma 7
