@@ -71,6 +71,47 @@ It will throw `Type 'Decimal' is not assignable to type 'string'`. Note that eve
 
 Aside from using `props.params`, you can also use `useRouter`.
 
-## TO DO
+## 4. Authentication with NextAuth
 
-- Upgrade to Next.js 16
+### 4.1. [NextAuth Set-Up](https://authjs.dev/getting-started/adapters/prisma)
+
+- `npm i next-auth`
+- `npm i @auth/prisma-adapter`
+- `npx auth secret`
+
+If you're going to create a database adapter, make sure you familiarize yourself with the [models](https://authjs.dev/concepts/database-models) Auth.js expects to be present.
+
+### 4.2. [When to use `satisfies` keyword?](https://refine.dev/blog/typescript-satisfies-operator/#typescript-satisfies---annotated-type-has-precedence-over-satisfies-type)
+
+Use `satisfies` when you're working with complex objects containing many nested properties.
+
+```typescript
+type TAddress = {
+  addressLine1: string;
+  addressLine2?: string;
+  postCode: number | string;
+  city: string;
+  state: string;
+  country: string;
+};
+
+type UserKeys = "username" | "email" | "firstName" | "lastName" | "address";
+type TUser = Record<UserKeys, string | TAddress>;
+
+const joe: TUser = {
+  username: "joe_hiyden",
+  email: "joe@exmaple.com",
+  firstName: "Joe",
+  lastName: "Hiyden",
+  address: {
+    addressLine1: "1, New Avenue",
+    addressLine2: "Mission Bay",
+    postCode: 12345,
+    city: "California",
+    state: "California",
+    country: "USA"
+  }
+} satisfies TUser;
+
+console.log(joe.address.postCode); // Property 'postCode' does not exist on type 'string | TAddress'. Property 'postCode' does not exist on type 'string'.(2339)
+```
