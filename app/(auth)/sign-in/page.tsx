@@ -1,3 +1,10 @@
+import Image from "next/image";
+import Link from "next/link";
+
+// * Constants
+import { APP_NAME } from "@/lib/constants";
+
+// * Components
 import {
   Card,
   CardHeader,
@@ -5,9 +12,7 @@ import {
   CardDescription,
   CardContent
 } from "@/components/ui/card";
-import { APP_NAME } from "@/lib/constants";
-import Image from "next/image";
-import Link from "next/link";
+import CredentialsSignInForm from "./credentials-sign-in-form";
 
 export const metadata = {
   title: "Sign In"
@@ -16,19 +21,22 @@ export const metadata = {
 export default function SignInPage() {
   return (
     <Card className="w-full max-w-md">
-      <CardHeader>
+      <CardHeader className="gap-2">
         <Link href="/">
           <Image
             src="/images/logo.svg"
             alt={APP_NAME}
             width={100}
             height={100}
+            className="mx-auto"
           />
         </Link>
         <CardTitle>Sign In</CardTitle>
         <CardDescription>Sign in to your account</CardDescription>
-        <CardContent></CardContent>
       </CardHeader>
+      <CardContent>
+        <CredentialsSignInForm />
+      </CardContent>
     </Card>
   );
 }
