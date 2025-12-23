@@ -23,6 +23,8 @@ export async function signInWithCredentials(
       throw error;
     }
 
+    console.dir(error, { depth: null });
+
     return { success: false, message: "Invalid email or password." };
   }
 }

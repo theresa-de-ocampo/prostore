@@ -1,9 +1,16 @@
-import NextAuth from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import NextAuth, { getServerSession } from "next-auth";
+import type { NextAuthOptions } from "next-auth";
+import type {
+  GetServerSidePropsContext,
+  NextApiRequest,
+  NextApiResponse
+} from "next";
+
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/db/prisma";
-import CredentialsProvider from "next-auth/providers/credentials";
+
 import { compareSync } from "bcrypt-ts-edge";
-import type { NextAuthOptions } from "next-auth";
 
 export const config = {
   pages: {
@@ -58,3 +65,12 @@ export const config = {
 } satisfies NextAuthOptions;
 
 export const handler = NextAuth(config);
+
+export function auth(
+  ...args:
+    | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
+    | [NextApiRequest, NextApiResponse]
+    | []
+) {
+  return getServerSession(...args, config);
+}
