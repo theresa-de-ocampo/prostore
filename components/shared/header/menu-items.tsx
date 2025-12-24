@@ -4,6 +4,7 @@ import Link from "next/link";
 // * Components
 import ModeToggle from "./mode-toggle";
 import { Button } from "@/components/ui/button";
+import UserButton from "./user-button";
 
 export default function MenuItems() {
   return (
@@ -14,11 +15,7 @@ export default function MenuItems() {
           <ShoppingCart /> Cart
         </Link>
       </Button>
-      <Button asChild>
-        <Link href="/sign-in">
-          <UserIcon /> Sign In
-        </Link>
-      </Button>
+      <UserButton />
     </>
   );
 }

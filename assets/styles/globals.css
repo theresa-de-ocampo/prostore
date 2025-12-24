@@ -126,7 +126,7 @@ h2 {
 }
 
 @utility wrapper {
-  @apply p-5 md:px-10;
+  @apply p-5 md:px-10 xl:px-20;
 }
 
 @utility flex-start {
