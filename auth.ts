@@ -1,11 +1,5 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import NextAuth, { getServerSession } from "next-auth";
-import type { NextAuthOptions } from "next-auth";
-import type {
-  GetServerSidePropsContext,
-  NextApiRequest,
-  NextApiResponse
-} from "next";
+import NextAuth, { type NextAuthConfig } from "next-auth";
 
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/db/prisma";
@@ -28,15 +22,18 @@ export const config = {
         email: { type: "email" },
         password: { type: "password" }
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         let response = null;
 
         if (credentials) {
           const user = await prisma.user.findFirst({
-            where: { email: credentials.email }
+            where: { email: credentials.email as string }
           });
 
-          if (user && compareSync(credentials.password, user.password)) {
+          if (
+            user &&
+            compareSync(credentials.password as string, user.password)
+          ) {
             response = {
               id: user.id,
               name: user.name,
@@ -62,15 +59,6 @@ export const config = {
       return session;
     }
   }
-} satisfies NextAuthOptions;
+} satisfies NextAuthConfig;
 
-export const handler = NextAuth(config);
-
-export function auth(
-  ...args:
-    | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
-    | [NextApiRequest, NextApiResponse]
-    | []
-) {
-  return getServerSession(...args, config);
-}
+export const { handlers, auth, signIn, signOut } = NextAuth(config);

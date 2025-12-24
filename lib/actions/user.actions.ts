@@ -1,6 +1,6 @@
 "use server";
 
-import { signIn } from "next-auth/react";
+import { signIn } from "@/auth";
 import { signInSchema } from "../validators";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 
@@ -22,8 +22,6 @@ export async function signInWithCredentials(
       console.log("Redirect Error!");
       throw error;
     }
-
-    console.dir(error, { depth: null });
 
     return { success: false, message: "Invalid email or password." };
   }
