@@ -1,13 +1,18 @@
 "use client";
 
+import Link from "next/link";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
+// import { useSearchParams } from "next/navigation";
+
+// * Components
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import Link from "next/link";
+
+// * Actions
 import { signInWithCredentials } from "@/lib/actions/user.actions";
-import { useActionState } from "react";
-import { useFormStatus } from "react-dom";
 
 export default function CredentialsSignInForm() {
   const [data, action] = useActionState(signInWithCredentials, {
@@ -15,10 +20,14 @@ export default function CredentialsSignInForm() {
     message: ""
   });
 
+  // const searchParams = useSearchParams();
+  // const callbackUrl = searchParams.get("callbackUrl") || "/";
+
   const { pending } = useFormStatus();
 
   return (
     <form className="flex flex-col gap-4" action={action}>
+      {/* <input type="hidden" name="callbackUrl" value={callbackUrl} /> */}
       <div>
         <Label htmlFor="email">Email</Label>
         <Input
