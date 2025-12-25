@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-// import { useSearchParams } from "next/navigation";
 
 // * Components
 import { Label } from "@/components/ui/label";
@@ -12,22 +11,22 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 
 // * Actions
-import { signInWithCredentials } from "@/lib/actions/user.actions";
+import { signUp } from "@/lib/actions/user.actions";
 
-export default function CredentialsSignInForm() {
-  const [data, action] = useActionState(signInWithCredentials, {
+export default function SignUpForm() {
+  const [data, action] = useActionState(signUp, {
     success: false,
     message: ""
   });
-
-  // const searchParams = useSearchParams();
-  // const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const { pending } = useFormStatus();
 
   return (
     <form className="flex flex-col gap-4" action={action}>
-      {/* <input type="hidden" name="callbackUrl" value={callbackUrl} /> */}
+      <div>
+        <Label htmlFor="name">Name</Label>
+        <Input id="name" name="name" type="text" required className="mt-1.5" />
+      </div>
       <div>
         <Label htmlFor="email">Email</Label>
         <Input
@@ -49,18 +48,28 @@ export default function CredentialsSignInForm() {
         />
       </div>
       <div>
+        <Label htmlFor="confirm-password">Confirm Password</Label>
+        <Input
+          id="confirm-password"
+          name="confirmPassword"
+          type="password"
+          required
+          className="mt-1.5"
+        />
+      </div>
+      <div>
         <Button className="w-full" disabled={pending}>
           {pending && <Spinner />}
-          Sign In
+          Sign Up
         </Button>
         {!data.success && (
           <p className="text-destructive mt-2">{data.message}</p>
         )}
       </div>
       <p className="text-sm text-muted-foreground">
-        Don&apos;t have an account?{" "}
-        <Link href="/sign-up" target="_self" className="link">
-          Sign Up
+        Already have an account?{" "}
+        <Link href="/sign-in" target="_self" className="link">
+          Sign In
         </Link>
       </p>
     </form>
