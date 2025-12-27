@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { type NextAuthConfig } from "next-auth";
 
@@ -48,9 +49,30 @@ export const config = {
     })
   ],
   callbacks: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async jwt({ token, user }: any) {
+      if (user) {
+        token.role = user.role;
+
+        if (!user.name) {
+          const pseudoName = user.email.split("@")[0];
+          token.name = `${pseudoName.charAt(0).toUpperCase()}${pseudoName.slice(
+            1
+          )}`;
+
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { name: token.name }
+          });
+        }
+      }
+
+      return token;
+    },
     async session({ session, user, trigger, token }: any) {
+      console.dir(session, { depth: null });
       session.user.id = token.sub;
+      session.user.role = token.role;
+      session.user.name = token.name;
 
       if (trigger === "update") {
         session.user.name = user.name;

@@ -25,7 +25,7 @@ export default function SignUpForm() {
     <form className="flex flex-col gap-4" action={action}>
       <div>
         <Label htmlFor="name">Name</Label>
-        <Input id="name" name="name" type="text" required className="mt-1.5" />
+        <Input id="name" name="name" type="text" className="mt-1.5" />
       </div>
       <div>
         <Label htmlFor="email">Email</Label>

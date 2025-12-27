@@ -220,3 +220,9 @@ At `user-button.tsx`, if you try to directly use the `signOut` function from `Ne
 #### Why `signOut` throws the Type Error
 
 - It's not a server action — it's meant to be called directly in other server actions or routes.
+
+### 4.5. JWT Callback
+
+When you're using the Credentials provider, you control the user object returned during the `authorize` callback, but `profile` will be `undefined`.
+
+When using any OAuth provider, the provider returns a `profile` object usually containing `name`, `email`, `image`, and `roles`. Different providers may name their fields differently or provide varying levels of information.
