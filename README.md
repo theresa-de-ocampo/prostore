@@ -226,3 +226,36 @@ At `user-button.tsx`, if you try to directly use the `signOut` function from `Ne
 When you're using the Credentials provider, you control the user object returned during the `authorize` callback, but `profile` will be `undefined`.
 
 When using any OAuth provider, the provider returns a `profile` object usually containing `name`, `email`, `image`, and `roles`. Different providers may name their fields differently or provide varying levels of information.
+
+### 4.6. Updating Sessions
+
+Consider the following callbacks.
+
+```javascript
+async jwt({ session }) {...},
+async session({ session }) {...}
+```
+
+Those session parameters are not the same object, and they're used in different situations.
+
+#### `jwt` callback — `session` param
+
+The `session` argument here is only present when the trigger is _"update"_ — i.e., when you call:
+
+```javascript
+import { useSession } from "next-auth/react";
+const { update } = useSession();
+update();
+```
+
+- `session` contains the partial session fields being updated. In this case, its value would only be `{ name: Harry }`.
+- It is not the full session.
+- It is not the session sent to the client.
+- You usually use to merge new/updated fields into the JWT.
+
+Note that at this point — when you call `update()` — the `user` argument of the `jwt` callback will be undefined since it is only the response returned from the `authorize` callback.
+
+#### `session` callback — `session` param
+
+- `session` is the object returned to the browser.
+- Values from the JWT are usually attached to it.
