@@ -259,3 +259,9 @@ Note that at this point — when you call `update()` — the `user` argument of 
 
 - `session` is the object returned to the browser.
 - Values from the JWT are usually attached to it.
+
+## 5. Add to Cart
+
+### 5.1. `NextRouter was not mounted.`
+
+`next/router` is for the older **Pages Router** and `next/navigation` is for the newer **App Router**.

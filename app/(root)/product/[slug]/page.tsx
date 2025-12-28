@@ -3,8 +3,8 @@ import { notFound } from "next/navigation";
 import ProductPrice from "@/components/shared/product/product-price";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import ProductImages from "@/components/shared/product/product-images";
+import AddToCartButton from "@/components/shared/product/add-to-cart";
 
 export default async function ProductDetailsPage(props: {
   params: Promise<{ slug: string }>;
@@ -53,7 +53,16 @@ export default async function ProductDetailsPage(props: {
               )}
             </div>
             {product.stock > 0 && (
-              <Button className="w-full mt-2">Add to Cart</Button>
+              <AddToCartButton
+                item={{
+                  productId: product.id,
+                  name: product.name,
+                  slug: product.slug,
+                  quantity: 1,
+                  image: product.images[0],
+                  price: product.price
+                }}
+              />
             )}
           </CardContent>
         </Card>
