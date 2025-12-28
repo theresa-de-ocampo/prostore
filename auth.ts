@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { type NextAuthConfig } from "next-auth";
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/db/prisma";
@@ -78,6 +80,23 @@ export const config = {
       session.user.name = token.name;
 
       return session;
+    },
+    authorized({ request, auth }) {
+      let response: NextResponse<unknown> | boolean = true;
+
+      if (!request.cookies.get("sessionCartId")) {
+        const sessionCartId = crypto.randomUUID();
+        const requestHeaders = new Headers(request.headers);
+        response = NextResponse.next({
+          request: {
+            headers: requestHeaders
+          }
+        });
+
+        response.cookies.set("sessionCartId", sessionCartId);
+      }
+
+      return response;
     }
   }
 } satisfies NextAuthConfig;
