@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { type NextAuthConfig } from "next-auth";
-import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 import { PrismaAdapter } from "@auth/prisma-adapter";
