@@ -67,3 +67,8 @@ export const cartSchema = z.object({
   sessionCartId: z.string().min(1, "Session Cart ID is required."),
   userId: z.string().optional().nullable()
 });
+
+export const cartCookie = z.object({
+  sessionCartId: z.string().min(1, "Session Cart ID is required."),
+  userId: z.string().optional().nullable()
+});

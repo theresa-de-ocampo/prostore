@@ -17,6 +17,16 @@ export function formatDecimal(value: string, digits = 2): string {
   return `${wholeNumber}.${fractionalPart.padEnd(digits, "0")}`;
 }
 
+export function round(value: number | string): number {
+  let number = value;
+
+  if (typeof number === "string") {
+    number = parseFloat(number);
+  }
+
+  return Math.round((number + Number.EPSILON) * 100) / 100;
+}
+
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
