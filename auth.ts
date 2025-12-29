@@ -86,13 +86,7 @@ export const config = {
 
       if (!request.cookies.get("sessionCartId")) {
         const sessionCartId = crypto.randomUUID();
-        const requestHeaders = new Headers(request.headers);
-        response = NextResponse.next({
-          request: {
-            headers: requestHeaders
-          }
-        });
-
+        response = NextResponse.next();
         response.cookies.set("sessionCartId", sessionCartId);
       }
 
