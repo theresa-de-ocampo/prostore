@@ -58,17 +58,17 @@ export const cartItemSchema = z.object({
   price: money
 });
 
-export const cartSchema = z.object({
+export const cartCookieSchema = z.object({
+  sessionCartId: z.string().min(1, "Session Cart ID is required."),
+  userId: z.string().optional().nullable()
+});
+
+export const cartSchema = cartCookieSchema.extend({
   items: z.array(cartItemSchema),
   itemsPrice: money,
   totalPrice: money,
   shippingPrice: money,
   taxPrice: money,
-  sessionCartId: z.string().min(1, "Session Cart ID is required."),
-  userId: z.string().optional().nullable()
-});
-
-export const cartCookie = z.object({
   sessionCartId: z.string().min(1, "Session Cart ID is required."),
   userId: z.string().optional().nullable()
 });
