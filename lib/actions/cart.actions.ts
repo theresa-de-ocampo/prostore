@@ -6,7 +6,7 @@ import { formatError } from "../utils";
 import { auth } from "@/auth";
 import { prisma } from "@/db/prisma";
 import { convertToPlainObject, round } from "../utils";
-import { cartItemSchema, cartSchema } from "../validators";
+import { cartItemSchema, cartRecord } from "../validators";
 import { revalidatePath } from "next/cache";
 
 async function getCartCookie() {
@@ -44,14 +44,16 @@ function calculatePrices(items: CartItem[]) {
 }
 
 async function createCart(cart: Cart) {
-  const validatedCart = cartSchema.parse(cart);
-
   await prisma.cart.create({
-    data: validatedCart
+    data: cart
   });
 }
 
-async function updateCart(cart: Cart, itemToAdd: CartItem, product: Product) {
+async function updateCart(
+  cart: CartRecord,
+  itemToAdd: CartItem,
+  product: Product
+) {
   const items = [...cart.items];
   const i = items.findIndex((item) => item.productId === itemToAdd.productId);
 
@@ -77,6 +79,7 @@ async function updateCart(cart: Cart, itemToAdd: CartItem, product: Product) {
     }
   });
 }
+
 export async function addToCart(data: CartItem) {
   let response;
 
@@ -125,5 +128,11 @@ export async function getCart({
     where: userId ? { userId } : { sessionCartId }
   });
 
-  return convertToPlainObject(cart);
+  let validatedCart = null;
+
+  if (cart) {
+    validatedCart = cartRecord.parse(convertToPlainObject(cart));
+  }
+
+  return validatedCart;
 }

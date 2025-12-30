@@ -8,9 +8,14 @@ const nullableString = z
   .default(null)
   .transform((s) => (s === "" ? null : s));
 
-const money = z
+const money = z.coerce
   .string()
   .refine((value) => /^\d+(\.\d{2})?$/.test(formatDecimal(value)));
+
+const dbRecordSchema = z.object({
+  id: z.uuid(),
+  createdAt: z.iso.datetime()
+});
 
 export const productSchema = z.object({
   id: z.uuid(),
@@ -72,3 +77,5 @@ export const cartSchema = cartCookieSchema.extend({
   sessionCartId: z.string().min(1, "Session Cart ID is required."),
   userId: z.string().optional().nullable()
 });
+
+export const cartRecord = dbRecordSchema.extend(cartSchema.shape);
