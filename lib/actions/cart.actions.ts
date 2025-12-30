@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { Cart, CartItem } from "@/types";
+import { Cart, CartRecord, CartItem, Product } from "@/types";
 import { formatError } from "../utils";
 import { auth } from "@/auth";
 import { prisma } from "@/db/prisma";
@@ -51,6 +51,32 @@ async function createCart(cart: Cart) {
   });
 }
 
+async function updateCart(cart: Cart, itemToAdd: CartItem, product: Product) {
+  const items = [...cart.items];
+  const i = items.findIndex((item) => item.productId === itemToAdd.productId);
+
+  if (i >= 0) {
+    if (product.stock < items[i].quantity + 1) {
+      throw new Error("Not enough stock.");
+    }
+
+    items[i].quantity += 1;
+  } else {
+    if (product.stock < itemToAdd.quantity) {
+      throw new Error("Not enough stock.");
+    }
+
+    items.push(itemToAdd);
+  }
+
+  await prisma.cart.update({
+    where: { id: cart.id },
+    data: {
+      items,
+      ...calculatePrices(items)
+    }
+  });
+}
 export async function addToCart(data: CartItem) {
   let response;
 
@@ -68,7 +94,9 @@ export async function addToCart(data: CartItem) {
       throw new Error("Product not found.");
     }
 
-    if (!cart) {
+    if (cart) {
+      await updateCart(cart, data, product);
+    } else {
       await createCart({
         items: [item],
         ...calculatePrices([item]),
