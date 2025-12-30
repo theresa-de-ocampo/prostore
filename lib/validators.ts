@@ -18,7 +18,6 @@ const dbRecordSchema = z.object({
 });
 
 export const productSchema = z.object({
-  id: z.uuid(),
   name: z.string().trim().min(3, "Product name must be at least 3 characters."),
   slug: z.string().trim().min(3, "Slug must be at least 3 characters."),
   category: z.string().trim().min(3),
@@ -33,9 +32,10 @@ export const productSchema = z.object({
     .refine((value) => /^\d\.\d$/.test(formatDecimal(value, 1))),
   stock: z.coerce.number().int(),
   isFeatured: z.boolean().default(false),
-  banner: nullableString,
-  createdAt: z.iso.datetime()
+  banner: nullableString
 });
+
+export const productRecord = dbRecordSchema.extend(productSchema.shape);
 
 export const signInSchema = z.object({
   email: z.email("Invalid email address"),
