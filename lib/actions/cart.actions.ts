@@ -107,7 +107,8 @@ export async function addToCart(data: CartItem) {
       });
     }
 
-    revalidatePath(`/product/${product.slug}`);
+    // Will need this once cart badge has been created.
+    // revalidatePath(`/product/${product.slug}`);
 
     response = { success: true, message: `${data.name} added to cart.` };
   } catch (error) {
