@@ -80,6 +80,26 @@ async function updateCart(
   });
 }
 
+export async function getCart({
+  sessionCartId,
+  userId
+}: {
+  sessionCartId: string;
+  userId: string | undefined;
+}) {
+  const cart = await prisma.cart.findFirst({
+    where: userId ? { userId } : { sessionCartId }
+  });
+
+  let validatedCart = null;
+
+  if (cart) {
+    validatedCart = cartRecord.parse(convertToPlainObject(cart));
+  }
+
+  return validatedCart;
+}
+
 export async function addToCart(data: CartItem) {
   let response;
 
@@ -107,7 +127,7 @@ export async function addToCart(data: CartItem) {
       });
     }
 
-    // Will need this once cart badge has been created.
+    // Will need this if a cart badge has been created.
     // revalidatePath(`/product/${product.slug}`);
 
     response = { success: true, message: `${data.name} added to cart.` };
@@ -118,22 +138,48 @@ export async function addToCart(data: CartItem) {
   return response;
 }
 
-export async function getCart({
-  sessionCartId,
-  userId
-}: {
-  sessionCartId: string;
-  userId: string | undefined;
-}) {
-  const cart = await prisma.cart.findFirst({
-    where: userId ? { userId } : { sessionCartId }
-  });
+export async function removeFromCart(data: CartItem) {
+  let response;
 
-  let validatedCart = null;
+  try {
+    const cartCookie = await getCartCookie();
+    const cart = await getCart(cartCookie);
 
-  if (cart) {
-    validatedCart = cartRecord.parse(convertToPlainObject(cart));
+    if (!cart) {
+      throw new Error("Cart not found.");
+    }
+
+    const items = [...cart.items];
+    const i = items.findIndex((item) => item.productId === data.productId);
+
+    if (i < 0) {
+      throw new Error("Product not found.");
+    }
+
+    if (items[i].quantity === 1) {
+      items.splice(i, 1);
+    } else {
+      items[i].quantity -= 1;
+    }
+
+    await prisma.cart.update({
+      where: { id: data.productId },
+      data: {
+        items,
+        ...calculatePrices(items)
+      }
+    });
+
+    // Will need this if a cart badge has been created.
+    // revalidatePath(`/product/${product.slug}`);
+
+    response = {
+      success: true,
+      message: `${data.name} was removed from the cart.`
+    };
+  } catch (error) {
+    response = { success: false, message: formatError(error) };
   }
 
-  return validatedCart;
+  return response;
 }
