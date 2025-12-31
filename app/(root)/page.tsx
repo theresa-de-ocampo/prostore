@@ -10,12 +10,12 @@ export default async function Home() {
   const latestProducts = await getLatestProducts();
 
   return (
-    <main>
+    <section>
       <ProductList
         data={latestProducts}
         title="Newest Arrivals"
         limit={LATEST_PRODUCTS_LIMIT}
       />
-    </main>
+    </section>
   );
 }

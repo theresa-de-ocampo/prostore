@@ -41,13 +41,18 @@ export default async function ProductDetailsPage(props: {
         <Card>
           <CardContent className="flex flex-col gap-2">
             <div className="flex-between">
-              <p>Price</p>
-              <ProductPrice value={parseFloat(product.price)} />
+              <p className="md:text-sm lg:text-base">Price</p>
+              <ProductPrice
+                value={parseFloat(product.price)}
+                className="md:text-xl lg:text-2xl"
+              />
             </div>
             <div className="flex-between">
-              <p>Status</p>
+              <p className="md:text-sm lg:text-base">Status</p>
               {product.stock > 0 ? (
-                <Badge variant="outline">In Stock</Badge>
+                <Badge variant="outline" className="md:px-1 lg:px-2">
+                  In Stock
+                </Badge>
               ) : (
                 <Badge variant="destructive">Out of Stock</Badge>
               )}

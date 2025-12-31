@@ -30,7 +30,7 @@ export default function AddToCartButton({ item }: { item: CartItem }) {
 
   return (
     <Button className="w-full mt-2" type="button" onClick={handleAddToCart}>
-      <Plus />
+      <Plus className="md:hidden lg:inline" />
       Add to Cart
     </Button>
   );
