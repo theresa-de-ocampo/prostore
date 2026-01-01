@@ -2,6 +2,7 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { type NextAuthConfig } from "next-auth";
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/db/prisma";
@@ -71,6 +72,34 @@ export const config = {
         token.name = session.name;
       }
 
+      if (trigger === "signIn" || trigger === "signUp") {
+        const cartCookie = await cookies();
+        const sessionCartId = cartCookie.get("sessionCartId")?.value;
+
+        if (sessionCartId) {
+          const cart = await prisma.cart.findFirst({
+            where: { sessionCartId }
+          });
+
+          if (cart) {
+            await prisma.cart.deleteMany({
+              where: {
+                userId: user.id
+              }
+            });
+
+            await prisma.cart.update({
+              where: {
+                id: cart.id
+              },
+              data: {
+                userId: user.id
+              }
+            });
+          }
+        }
+      }
+
       return token;
     },
     async session({ session, token }: any) {
@@ -80,7 +109,7 @@ export const config = {
 
       return session;
     },
-    authorized({ request, auth }) {
+    authorized({ request }) {
       let response: NextResponse<unknown> | boolean = true;
 
       if (!request.cookies.get("sessionCartId")) {

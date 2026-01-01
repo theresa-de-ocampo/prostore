@@ -1,0 +1,22 @@
+SCENARIO 1 : OK
+Add to Cart
+Sign In
+Get Back to Product
+It should still show the quantity
+
+SCENARIO 2 : OK
+You already have a cart and logged in Browser 1
+Go to incognito (Browser 2)
+Sign In (Browser 2)
+Go to the product (Browser 2)
+It should still show the quantity (Browser 2)
+
+SCENARIO 3: OK
+You already have a cart containing Product 1 and logged in Browser 1
+Go to incognito (Browser 2)
+Add to Cart Product 2 (Browser 2)
+Sign In (Browser 2)
+Go to Product 1 (Browser 2). It shouldn't be in the cart.
+Go to Product 2 (Browser 2). It should show the quantity.
+Go back to the prev Browser 1 with the old session cart id. Product 1 should no longer be in the cart. Product 2 should show the quantity.
+Record with the old session ID should have been deleted.

@@ -260,6 +260,10 @@ Note that at this point — when you call `update()` — the `user` argument of 
 - `session` is the object returned to the browser.
 - Values from the JWT are usually attached to it.
 
+### 4.7. New Users
+
+New users can be detected using the `jwt` callback. In v4, there's an `isNewUser` param, but this has now been replaced with the `signUp` trigger.
+
 ## 5. Add to Cart
 
 ### 5.1. `NextRouter was not mounted.`
