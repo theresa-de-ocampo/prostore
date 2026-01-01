@@ -1,9 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 
 // * Components
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { Minus, Plus } from "lucide-react";
 import { toast } from "sonner";
 
@@ -21,27 +23,32 @@ export default function CartItemControls({
   item: CartItem;
 }) {
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   async function handleAddToCart() {
-    const response = await addToCart(item);
+    startTransition(async () => {
+      const response = await addToCart(item);
 
-    if (response.success) {
-      toast.success(response.message, {
-        action: { label: "Go to Cart", onClick: () => router.push("cart") }
-      });
-    } else {
-      toast.error(response.message);
-    }
+      if (response.success) {
+        toast.success(response.message, {
+          action: { label: "Go to Cart", onClick: () => router.push("cart") }
+        });
+      } else {
+        toast.error(response.message);
+      }
+    });
   }
 
   async function handleRemoveFromCart() {
-    const response = await removeFromCart(item);
+    startTransition(async () => {
+      const response = await removeFromCart(item);
 
-    if (response.success) {
-      toast.success(response.message);
-    } else {
-      toast.error(response.message);
-    }
+      if (response.success) {
+        toast.success(response.message);
+      } else {
+        toast.error(response.message);
+      }
+    });
   }
 
   const itemExists =
@@ -50,17 +57,32 @@ export default function CartItemControls({
 
   return itemExists ? (
     <div className="flex-center mt-2">
-      <Button type="button" variant="outline" onClick={handleRemoveFromCart}>
-        <Minus />
+      <Button
+        type="button"
+        variant="outline"
+        onClick={handleRemoveFromCart}
+        disabled={isPending}
+      >
+        {isPending ? <Spinner /> : <Minus />}
       </Button>
       <span className="px-3">{itemExists.quantity}</span>
-      <Button type="button" variant="outline" onClick={handleAddToCart}>
-        <Plus />
+      <Button
+        type="button"
+        variant="outline"
+        onClick={handleAddToCart}
+        disabled={isPending}
+      >
+        {isPending ? <Spinner /> : <Plus />}
       </Button>
     </div>
   ) : (
-    <Button className="w-full mt-2" type="button" onClick={handleAddToCart}>
-      <Plus className="md:hidden lg:inline" />
+    <Button
+      className="w-full mt-2"
+      type="button"
+      onClick={handleAddToCart}
+      disabled={isPending}
+    >
+      {isPending ? <Spinner /> : <Plus className="md:hidden lg:inline" />}
       Add to Cart
     </Button>
   );
