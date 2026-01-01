@@ -41,7 +41,7 @@ export default async function ProductDetailsPage(props: {
           <p>{product.description}</p>
         </div>
       </section>
-      <section>
+      <section className="min-w-max">
         <Card>
           <CardContent className="flex flex-col gap-2">
             <div className="flex-between">
@@ -58,7 +58,9 @@ export default async function ProductDetailsPage(props: {
                   In Stock
                 </Badge>
               ) : (
-                <Badge variant="destructive">Out of Stock</Badge>
+                <Badge variant="destructive" className="md:px-1 lg:px-2">
+                  Sold Out
+                </Badge>
               )}
             </div>
             {product.stock > 0 && (
