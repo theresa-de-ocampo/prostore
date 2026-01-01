@@ -4,7 +4,8 @@ import ProductPrice from "@/components/shared/product/product-price";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import ProductImages from "@/components/shared/product/product-images";
-import AddToCartButton from "@/components/shared/product/add-to-cart";
+import CartItemControls from "@/components/shared/product/cart-item-controls";
+import { getCartCookie, getCart } from "@/lib/actions/cart.actions";
 
 export default async function ProductDetailsPage(props: {
   params: Promise<{ slug: string }>;
@@ -16,6 +17,9 @@ export default async function ProductDetailsPage(props: {
   if (!product) {
     notFound();
   }
+
+  const cartCookie = await getCartCookie();
+  const cart = await getCart(cartCookie);
 
   return (
     <section className="grid grid-cols-1 gap-3 md:grid-cols-5">
@@ -58,7 +62,8 @@ export default async function ProductDetailsPage(props: {
               )}
             </div>
             {product.stock > 0 && (
-              <AddToCartButton
+              <CartItemControls
+                cart={cart}
                 item={{
                   productId: product.id,
                   name: product.name,

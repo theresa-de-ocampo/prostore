@@ -9,7 +9,7 @@ import { convertToPlainObject, round } from "../utils";
 import { cartItemSchema, cartRecord } from "../validators";
 import { revalidatePath } from "next/cache";
 
-async function getCartCookie() {
+export async function getCartCookie() {
   const sessionCartId = (await cookies()).get("sessionCartId")?.value;
 
   if (!sessionCartId) {
@@ -49,13 +49,14 @@ async function createCart(cart: Cart) {
   });
 }
 
-async function updateCart(
+async function addItemToExistingCart(
   cart: CartRecord,
   itemToAdd: CartItem,
   product: Product
 ) {
   const items = [...cart.items];
   const i = items.findIndex((item) => item.productId === itemToAdd.productId);
+  let message;
 
   if (i >= 0) {
     if (product.stock < items[i].quantity + 1) {
@@ -63,12 +64,14 @@ async function updateCart(
     }
 
     items[i].quantity += 1;
+    message = `Increased quantity of ${itemToAdd.name}.`;
   } else {
     if (product.stock < itemToAdd.quantity) {
       throw new Error("Not enough stock.");
     }
 
     items.push(itemToAdd);
+    message = `Added ${itemToAdd.name} to cart.`;
   }
 
   await prisma.cart.update({
@@ -78,6 +81,8 @@ async function updateCart(
       ...calculatePrices(items)
     }
   });
+
+  return message;
 }
 
 export async function getCart({
@@ -91,7 +96,7 @@ export async function getCart({
     where: userId ? { userId } : { sessionCartId }
   });
 
-  let validatedCart = null;
+  let validatedCart = undefined;
 
   if (cart) {
     validatedCart = cartRecord.parse(convertToPlainObject(cart));
@@ -117,20 +122,21 @@ export async function addToCart(data: CartItem) {
       throw new Error("Product not found.");
     }
 
+    let message: string;
     if (cart) {
-      await updateCart(cart, data, product);
+      message = await addItemToExistingCart(cart, data, product);
     } else {
       await createCart({
         items: [item],
         ...calculatePrices([item]),
         ...cartCookie
       });
+      message = `Added ${data.name} to cart.`;
     }
 
-    // Will need this if a cart badge has been created.
-    // revalidatePath(`/product/${product.slug}`);
+    revalidatePath(`/product/${product.slug}`);
 
-    response = { success: true, message: `${data.name} added to cart.` };
+    response = { success: true, message };
   } catch (error) {
     response = { success: false, message: formatError(error) };
   }
@@ -156,26 +162,28 @@ export async function removeFromCart(data: CartItem) {
       throw new Error("Product not found.");
     }
 
+    let message;
     if (items[i].quantity === 1) {
       items.splice(i, 1);
+      message = `Removed ${data.name} from cart.`;
     } else {
       items[i].quantity -= 1;
+      message = `Decreased quantity of ${data.name}.`;
     }
 
     await prisma.cart.update({
-      where: { id: data.productId },
+      where: { id: cart.id },
       data: {
         items,
         ...calculatePrices(items)
       }
     });
 
-    // Will need this if a cart badge has been created.
-    // revalidatePath(`/product/${product.slug}`);
+    revalidatePath(`/product/${data.slug}`);
 
     response = {
       success: true,
-      message: `${data.name} was removed from the cart.`
+      message
     };
   } catch (error) {
     response = { success: false, message: formatError(error) };
