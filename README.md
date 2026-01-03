@@ -322,6 +322,36 @@ NextResponse.next({
 - This may override framework-critical headers.
 - This might unintentionally change `Content-Type`, and break streaming server actions.
 
+## 6. Cart & Shipping Address Pages
+
+### 6.1. Shipping Address Form
+
+The tutorial made use of the `<Form>` wrapper approach.
+
+```javascript
+<Form {...form}>
+  <form onSubmit={form.handleSubmit(onSubmit)}>// some code</form>
+</Form>
+```
+
+However, this is now [deprecated](https://ui.shadcn.com/docs/components/form#:~:text=We%20are%20not%20actively%20developing%20this%20component%20anymore.) and is no longer the [recommended approach](https://ui.shadcn.com/docs/forms/react-hook-form#form).
+
+Instead of using `<FormField>`, use the `<Field>` component instead. The `FormField` was specifically designed for integration with React Hook Form, whereas the newer `Field` abstraction is designed to be a more flexible, universal solution that supports multiple form libraries and technologies.
+
+#### Shadcn `FormField`
+
+- **Form Library Specific**: `FormField` was built with a direct dependency on the `useForm` hook from RHF.
+- **Usage**: It relied on RHF's `Controller` or `useController` internally to manage form state, validation, and errors.
+- **Limitation**: It was tightly coupled to RHF, making it difficult to use with other form management libraries.
+
+#### Shadcn `Field`
+
+- **Universal Abstraction**: `Field` is a newer abstraction intended to work seamlessly across different form solutions.
+- **Compatibility**: It is designed to be compatible with:
+  - Next.js Server Actions
+  - React Hook Form
+  - TanStack Form
+
 ## What server means in Next.js
 
 In Next.js, _server_ refers to the runtime environment where server code executes — things like:

@@ -7,6 +7,9 @@ import { ShippingAddress } from "@/types";
 import { getCartCookie, getCart } from "@/lib/actions/cart.actions";
 import { getUserById } from "@/lib/actions/user.actions";
 
+// * Components
+import ShippingAddressForm from "./shipping-address-form";
+
 export const metadata = {
   title: "Shipping Address"
 };
@@ -25,5 +28,9 @@ export default async function ShippingAddressPage() {
 
   const user = await getUserById(cartCookie.userId);
 
-  return <div>ShippingAddressPage</div>;
+  return (
+    <ShippingAddressForm
+      address={user.address as ShippingAddress | undefined}
+    />
+  );
 }

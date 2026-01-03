@@ -128,7 +128,7 @@ export async function editUser(id: string, data: { name: string }) {
 }
 
 export async function getUserById(userId: string) {
-  await prisma.user.findFirstOrThrow({
+  return await prisma.user.findFirstOrThrow({
     where: { id: userId }
   });
 }
