@@ -4,7 +4,7 @@ import ProductPrice from "@/components/shared/product/product-price";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import ProductImages from "@/components/shared/product/product-images";
-import CartItemControls from "@/components/shared/product/cart-item-controls";
+import CartItemControls from "@/components/shared/cart/cart-item-controls";
 import { getCartCookie, getCart } from "@/lib/actions/cart.actions";
 
 export default async function ProductDetailsPage(props: {

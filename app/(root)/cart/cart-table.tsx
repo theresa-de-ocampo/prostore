@@ -14,7 +14,7 @@ import {
   TableCell
 } from "@/components/ui/table";
 import { addToCart, removeFromCart } from "@/lib/actions/cart.actions";
-import QuantityControls from "@/components/shared/product/quantity-controls";
+import QuantityControls from "@/components/shared/cart/quantity-controls";
 
 export default function CartTable({ cart }: { cart?: Cart }) {
   const [isPending, startTransition] = useTransition();
