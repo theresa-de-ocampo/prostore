@@ -19,27 +19,25 @@ import QuantityControls from "@/components/shared/product/quantity-controls";
 export default function CartTable({ cart }: { cart?: Cart }) {
   const [isPending, startTransition] = useTransition();
 
-  const handleAddToCart = (item: CartItem) => {
+  async function handleAddToCart(item: CartItem) {
     startTransition(async () => {
       const response = await addToCart(item);
-      if (response.success) {
-        toast.success(response.message);
-      } else {
+
+      if (!response.success) {
         toast.error(response.message);
       }
     });
-  };
+  }
 
-  const handleRemoveFromCart = (item: CartItem) => {
+  async function handleRemoveFromCart(item: CartItem) {
     startTransition(async () => {
       const response = await removeFromCart(item);
-      if (response.success) {
-        toast.success(response.message);
-      } else {
+
+      if (!response.success) {
         toast.error(response.message);
       }
     });
-  };
+  }
 
   return (
     <section>
@@ -75,7 +73,7 @@ export default function CartTable({ cart }: { cart?: Cart }) {
                     isPending={isPending}
                   />
                 </TableCell>
-                <TableCell>{item.price}</TableCell>
+                <TableCell>${item.price}</TableCell>
               </TableRow>
             ))}
           </TableBody>

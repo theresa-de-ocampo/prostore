@@ -32,7 +32,7 @@ export default function CartItemControls({
 
       if (response.success) {
         toast.success(response.message, {
-          action: { label: "Go to Cart", onClick: () => router.push("cart") }
+          action: { label: "Go to Cart", onClick: () => router.push("/cart") }
         });
       } else {
         toast.error(response.message);
