@@ -1,10 +1,14 @@
 "use client";
 
-import Image from "next/image";
-import { Cart, CartItem } from "@/types";
-import Link from "next/link";
-import { useTransition } from "react";
 import { toast } from "sonner";
+
+// * Types
+import { TransitionStartFunction } from "react";
+import { Cart, CartItem } from "@/types";
+
+// * Components
+import Image from "next/image";
+import Link from "next/link";
 import {
   Table,
   TableHeader,
@@ -13,11 +17,19 @@ import {
   TableHead,
   TableCell
 } from "@/components/ui/table";
-import { addToCart, removeFromCart } from "@/lib/actions/cart.actions";
 import QuantityControls from "@/components/shared/cart/quantity-controls";
 
-export default function CartTable({ cart }: { cart: Cart }) {
-  const [isPending, startTransition] = useTransition();
+// * Actions
+import { addToCart, removeFromCart } from "@/lib/actions/cart.actions";
+
+export default function CartTable({
+  cart,
+  transition
+}: {
+  cart: Cart;
+  transition: [boolean, TransitionStartFunction];
+}) {
+  const [isPending, startTransition] = transition;
 
   async function handleAddToCart(item: CartItem) {
     startTransition(async () => {

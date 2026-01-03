@@ -6,11 +6,20 @@ import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
 
 // * Types
 import { Cart } from "@/types";
+import { TransitionStartFunction } from "react";
 
-export default function CartSummary({ cart }: { cart: Cart }) {
+export default function CartSummary({
+  cart,
+  transition
+}: {
+  cart: Cart;
+  transition: [boolean, TransitionStartFunction];
+}) {
+  const [isPending, startTransition] = transition;
   const router = useRouter();
 
   return (
@@ -29,8 +38,13 @@ export default function CartSummary({ cart }: { cart: Cart }) {
         </p>
       </CardContent>
       <CardFooter>
-        <Button onClick={() => router.push("/shipping-address")}>
-          <ArrowRight /> Proceed to Checkout
+        <Button
+          disabled={isPending}
+          onClick={() =>
+            startTransition(() => router.push("/shipping-address"))
+          }
+        >
+          {isPending ? <Spinner /> : <ArrowRight />} Proceed to Checkout
         </Button>
       </CardFooter>
     </Card>

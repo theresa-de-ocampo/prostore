@@ -1,7 +1,8 @@
-import CartTable from "./cart-table";
 import { getCartCookie, getCart } from "@/lib/actions/cart.actions";
+
+// * Components
 import Link from "next/link";
-import CartSummary from "./cart-summary";
+import ShoppingCart from "./cart";
 
 export const metadata = {
   title: "Cart"
@@ -15,10 +16,7 @@ export default async function CartPage() {
     <section>
       <h2>Shopping Cart</h2>
       {cart && cart.items.length > 0 ? (
-        <div className="flex gap-10">
-          <CartTable cart={cart} />
-          <CartSummary cart={cart} />
-        </div>
+        <ShoppingCart cart={cart} />
       ) : (
         <p>
           Cart is empty. <Link href="/">View Products.</Link>
