@@ -126,3 +126,9 @@ export async function editUser(id: string, data: { name: string }) {
 
   return response;
 }
+
+export async function getUserById(userId: string) {
+  await prisma.user.findFirstOrThrow({
+    where: { id: userId }
+  });
+}

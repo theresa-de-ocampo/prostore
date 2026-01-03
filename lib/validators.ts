@@ -80,3 +80,13 @@ export const cartSchema = cartCookieSchema.extend({
 });
 
 export const cartRecord = dbRecordSchema.extend(cartSchema.shape);
+
+export const shippingAddressSchema = z.object({
+  fullName: z.string().trim().nonempty("Name is required."),
+  street: z.string().trim().nonempty("Street is required."),
+  city: z.string().trim().nonempty("City is required."),
+  postalCode: z.string().trim().nonempty("Postal Code is required."),
+  country: z.string().trim().nonempty("Country is required."),
+  latitude: z.number().min(-90).max(-90).optional(),
+  longitude: z.number().min(-180).max(180).optional()
+});
