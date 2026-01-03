@@ -10,7 +10,8 @@ const nullableString = z
 
 const money = z.coerce
   .string()
-  .refine((value) => /^\d+(\.\d{2})?$/.test(formatDecimal(value)));
+  .transform((value) => formatDecimal(value))
+  .refine((value) => /^\d+(\.\d{2})?$/.test(value));
 
 const dbRecordSchema = z.object({
   id: z.uuid(),
