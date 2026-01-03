@@ -1,8 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { Cart } from "@/types";
+import { Cart, CartItem } from "@/types";
 import Link from "next/link";
+import { useTransition } from "react";
+import { toast } from "sonner";
 import {
   Table,
   TableHeader,
@@ -11,8 +13,34 @@ import {
   TableHead,
   TableCell
 } from "@/components/ui/table";
+import { addToCart, removeFromCart } from "@/lib/actions/cart.actions";
+import QuantityControls from "@/components/shared/product/quantity-controls";
 
 export default function CartTable({ cart }: { cart?: Cart }) {
+  const [isPending, startTransition] = useTransition();
+
+  const handleAddToCart = (item: CartItem) => {
+    startTransition(async () => {
+      const response = await addToCart(item);
+      if (response.success) {
+        toast.success(response.message);
+      } else {
+        toast.error(response.message);
+      }
+    });
+  };
+
+  const handleRemoveFromCart = (item: CartItem) => {
+    startTransition(async () => {
+      const response = await removeFromCart(item);
+      if (response.success) {
+        toast.success(response.message);
+      } else {
+        toast.error(response.message);
+      }
+    });
+  };
+
   return (
     <section>
       {cart && cart.items.length > 0 ? (
@@ -39,7 +67,14 @@ export default function CartTable({ cart }: { cart?: Cart }) {
                   </Link>
                   <span className="ml-2">{item.name}</span>
                 </TableCell>
-                <TableCell>{item.quantity}</TableCell>
+                <TableCell>
+                  <QuantityControls
+                    quantity={item.quantity}
+                    onAdd={() => handleAddToCart(item)}
+                    onRemove={() => handleRemoveFromCart(item)}
+                    isPending={isPending}
+                  />
+                </TableCell>
                 <TableCell>{item.price}</TableCell>
               </TableRow>
             ))}

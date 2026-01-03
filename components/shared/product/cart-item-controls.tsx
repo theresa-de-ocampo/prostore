@@ -6,8 +6,9 @@ import { useTransition } from "react";
 // * Components
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { Minus, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { toast } from "sonner";
+import QuantityControls from "./quantity-controls";
 
 // * Types
 import { CartRecord, CartItem } from "@/types";
@@ -56,25 +57,12 @@ export default function CartItemControls({
     cart.items.find((cartItem) => cartItem.productId === item.productId);
 
   return itemExists ? (
-    <div className="flex-center mt-2">
-      <Button
-        type="button"
-        variant="outline"
-        onClick={handleRemoveFromCart}
-        disabled={isPending}
-      >
-        {isPending ? <Spinner /> : <Minus />}
-      </Button>
-      <span className="px-3">{itemExists.quantity}</span>
-      <Button
-        type="button"
-        variant="outline"
-        onClick={handleAddToCart}
-        disabled={isPending}
-      >
-        {isPending ? <Spinner /> : <Plus />}
-      </Button>
-    </div>
+    <QuantityControls
+      quantity={itemExists.quantity}
+      onAdd={handleAddToCart}
+      onRemove={handleRemoveFromCart}
+      isPending={isPending}
+    />
   ) : (
     <Button
       className="w-full mt-2"
