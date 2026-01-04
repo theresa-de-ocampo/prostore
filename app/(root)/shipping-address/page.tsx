@@ -30,6 +30,7 @@ export default async function ShippingAddressPage() {
 
   return (
     <ShippingAddressForm
+      userId={user.id}
       address={(user?.address || undefined) as ShippingAddress | undefined}
     />
   );

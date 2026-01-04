@@ -1,11 +1,10 @@
 "use client";
 
 import { shippingAddressSchema } from "@/lib/validators";
-import { ShippingAddress } from "@/types";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
-import { z } from "zod";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 // * Components
 import {
@@ -14,14 +13,23 @@ import {
   FieldGroup,
   FieldLabel
 } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
+
+// * Actions
+import { updateUserAddress } from "@/lib/actions/user.actions";
+
+// * Types
+import { ShippingAddress } from "@/types";
 
 export default function ShippingAddressForm({
+  userId,
   address
 }: {
+  userId: string;
   address?: ShippingAddress;
 }) {
   const form = useForm<ShippingAddress>({
@@ -37,9 +45,18 @@ export default function ShippingAddressForm({
   });
 
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   function onSubmit(data: ShippingAddress) {
-    console.log(data);
+    startTransition(async () => {
+      const response = await updateUserAddress(userId, data);
+
+      if (response.success) {
+        router.push("/payment-method");
+      } else {
+        toast.error(response.message);
+      }
+    });
   }
 
   return (
