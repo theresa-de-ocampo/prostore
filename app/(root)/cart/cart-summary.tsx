@@ -41,7 +41,7 @@ export default function CartSummary({
         <Button
           disabled={isPending}
           onClick={() =>
-            startTransition(() => router.push("/shipping-address"))
+            startTransition(() => router.push("/checkout/shipping-address"))
           }
         >
           {isPending ? <Spinner /> : <ArrowRight />} Proceed to Checkout
