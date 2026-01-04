@@ -34,7 +34,7 @@ export default function CartSummary({
             )}
             )
           </span>
-          <span className="font-bold">{cart.itemsPrice}</span>
+          <span className="font-bold">${cart.itemsPrice}</span>
         </p>
       </CardContent>
       <CardFooter>

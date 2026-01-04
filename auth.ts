@@ -66,38 +66,38 @@ export const config = {
             data: { name: token.name }
           });
         }
+
+        if (trigger === "signIn" || trigger === "signUp") {
+          const cartCookie = await cookies();
+          const sessionCartId = cartCookie.get("sessionCartId")?.value;
+
+          if (sessionCartId) {
+            const cart = await prisma.cart.findFirst({
+              where: { sessionCartId }
+            });
+
+            if (cart) {
+              await prisma.cart.deleteMany({
+                where: {
+                  userId: user.id
+                }
+              });
+
+              await prisma.cart.update({
+                where: {
+                  id: cart.id
+                },
+                data: {
+                  userId: user.id
+                }
+              });
+            }
+          }
+        }
       }
 
       if (trigger === "update" && session?.name) {
         token.name = session.name;
-      }
-
-      if (trigger === "signIn" || trigger === "signUp") {
-        const cartCookie = await cookies();
-        const sessionCartId = cartCookie.get("sessionCartId")?.value;
-
-        if (sessionCartId) {
-          const cart = await prisma.cart.findFirst({
-            where: { sessionCartId }
-          });
-
-          if (cart) {
-            await prisma.cart.deleteMany({
-              where: {
-                userId: user.id
-              }
-            });
-
-            await prisma.cart.update({
-              where: {
-                id: cart.id
-              },
-              data: {
-                userId: user.id
-              }
-            });
-          }
-        }
       }
 
       return token;
