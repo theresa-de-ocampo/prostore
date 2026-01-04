@@ -109,10 +109,15 @@ export const config = {
 
       return session;
     },
-    authorized({ request }) {
+    authorized({ request, auth }) {
       let response: NextResponse<unknown> | boolean = true;
 
-      if (!request.cookies.get("sessionCartId")) {
+      const protectedPaths = ["/checkout", "/admin"];
+      const { pathname } = request.nextUrl;
+
+      if (!auth && protectedPaths.some((p) => pathname.startsWith(p))) {
+        response = false;
+      } else if (!request.cookies.get("sessionCartId")) {
         const sessionCartId = crypto.randomUUID();
         response = NextResponse.next();
         response.cookies.set("sessionCartId", sessionCartId);

@@ -12,8 +12,6 @@ export default function CheckoutLayout({
 }) {
   const pathname = usePathname();
 
-  console.log(pathname);
-
   function getCurrentStep() {
     let step;
 

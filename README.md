@@ -373,6 +373,44 @@ Instead of a long-running server, SSR is executed per-request. In this case, _Se
 
 But conceptually, it still fits the same role: the place where pre-rendering and data fetching happen before HTML is sent to the browser.
 
+### 6.2. [Next.js Proxy and NextAuth's `authorized` Callback](https://github.com/nextauthjs/next-auth/issues/12976)
+
+Initially you've modified proxy.ts to hold the logic for protecting routes.
+
+```javascript
+// proxy.ts
+import { NextResponse } from "next/server";
+
+// export { auth as proxy } from "@/auth";
+import { auth } from "@/auth";
+
+export default auth((req) => {
+  if (!req.auth) {
+    const signInURL = new URL("/sign-in", req.url);
+    return NextResponse.redirect(signInURL);
+  }
+});
+
+export const config = {
+  matcher: "/checkout/:path"
+};
+```
+
+However, this caused regression with setting the session cart ID. If you use the auth function as a wrapper in your middleware, then it will **NOT** call the authorized callback.
+
+If you use the middleware without passing a callback, then it calls the `authorized` callback. That's why you reverted it back to the following.
+
+```javascript
+// proxy.ts
+export { auth as proxy } from "@/auth";
+```
+
+### 6.3. Returning `false` from NextAuth's `authorized` callback
+
+The `authorized` callback in NextAuth is designed to control access to routes. When it returns `false`, NextAuth automatically redirects the user to the `signIn` page specified in the `pages` configuration.
+
+It also automatically includes a `callbackUrl` query parameter.
+
 ## Server-Side Caching
 
 ### Data Request Flow
