@@ -26,10 +26,15 @@ export default function ShippingAddressForm({
 }) {
   const form = useForm<ShippingAddress>({
     resolver: zodResolver(shippingAddressSchema),
-    defaultValues: address
+    defaultValues: address || {
+      fullName: "",
+      street: "",
+      city: "",
+      postalCode: "",
+      country: ""
+    },
+    mode: "all"
   });
-
-  console.log(address);
 
   const [isPending, startTransition] = useTransition();
 
