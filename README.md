@@ -352,27 +352,6 @@ Instead of using `<FormField>`, use the `<Field>` component instead. The `FormFi
   - React Hook Form
   - TanStack Form
 
-## What server means in Next.js
-
-In Next.js, _server_ refers to the runtime environment where server code executes — things like:
-
-- Server Components
-- Route Handlers (`app/api/*`)
-- Server Actions
-- `getServerSideProps` in Pages Router
-
-If you deploy to Azure App Service, the _Server_ = App Service.
-
-If you deploy to Vercel or other serverless providers, then the _server_ becomes:
-
-- Edge Functions
-- Serverless Functions
-- Regional Runtimes
-
-Instead of a long-running server, SSR is executed per-request. In this case, _Server_ = serverless function execution environment.
-
-But conceptually, it still fits the same role: the place where pre-rendering and data fetching happen before HTML is sent to the browser.
-
 ### 6.2. [Next.js Proxy and NextAuth's `authorized` Callback](https://github.com/nextauthjs/next-auth/issues/12976)
 
 Initially you've modified proxy.ts to hold the logic for protecting routes.
@@ -411,9 +390,30 @@ The `authorized` callback in NextAuth is designed to control access to routes. W
 
 It also automatically includes a `callbackUrl` query parameter.
 
-## Server-Side Caching
+## 19. What server means in Next.js
 
-### Data Request Flow
+In Next.js, _server_ refers to the runtime environment where server code executes — things like:
+
+- Server Components
+- Route Handlers (`app/api/*`)
+- Server Actions
+- `getServerSideProps` in Pages Router
+
+If you deploy to Azure App Service, the _Server_ = App Service.
+
+If you deploy to Vercel or other serverless providers, then the _server_ becomes:
+
+- Edge Functions
+- Serverless Functions
+- Regional Runtimes
+
+Instead of a long-running server, SSR is executed per-request. In this case, _Server_ = serverless function execution environment.
+
+But conceptually, it still fits the same role: the place where pre-rendering and data fetching happen before HTML is sent to the browser.
+
+## 20. Server-Side Caching
+
+### 20.1. Data Request Flow
 
 ```
 Client (Browser)
@@ -425,7 +425,7 @@ Caching Layers
 Data Source (DB / API)
 ```
 
-### Main Players
+### 20.2. Main Players
 
 There are three main players, all of which operates in the server.
 
