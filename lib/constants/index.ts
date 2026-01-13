@@ -12,3 +12,9 @@ export const CHECKOUT_PAGES = [
   "Payment Method",
   "Place Order"
 ];
+
+export enum PAYMENT_METHOD {
+  PAYPAL = "PayPal",
+  STRIPE = "Stripe",
+  CASH_ON_DELIVERY = "CashOnDelivery"
+}

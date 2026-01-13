@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { formatDecimal } from "./utils";
+import { PAYMENT_METHOD } from "./constants";
 
 const nullableString = z
   .string()
@@ -89,4 +90,8 @@ export const shippingAddressSchema = z.object({
   country: z.string().trim().nonempty("Country is required."),
   latitude: z.number().min(-90).max(-90).optional(),
   longitude: z.number().min(-180).max(180).optional()
+});
+
+export const paymentMethodSchema = z.object({
+  type: z.enum(PAYMENT_METHOD)
 });
