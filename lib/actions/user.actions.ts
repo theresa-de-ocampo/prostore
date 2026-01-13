@@ -189,7 +189,7 @@ export async function updateUserPaymentMethod(data: PaymentMethod) {
     });
 
     response = {
-      succuess: true,
+      success: true,
       message: "User updated successfully."
     };
   } catch (error) {
