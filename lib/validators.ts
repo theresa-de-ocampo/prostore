@@ -67,7 +67,7 @@ export const cartItemSchema = z.object({
 
 export const cartCookieSchema = z.object({
   sessionCartId: z.string().min(1, "Session Cart ID is required."),
-  userId: z.string().optional().nullable()
+  userId: z.string().nullable()
 });
 
 export const cartSchema = cartCookieSchema.extend({
@@ -77,7 +77,7 @@ export const cartSchema = cartCookieSchema.extend({
   shippingPrice: money,
   taxPrice: money,
   sessionCartId: z.string().min(1, "Session Cart ID is required."),
-  userId: z.string().optional().nullable()
+  userId: z.string().nullable()
 });
 
 export const cartRecord = dbRecordSchema.extend(cartSchema.shape);
@@ -94,4 +94,37 @@ export const shippingAddressSchema = z.object({
 
 export const paymentMethodSchema = z.object({
   type: z.enum(PAYMENT_METHOD)
+});
+
+export const orderSchema = z.object({
+  orderId: z.uuid(),
+  shippingAddress: shippingAddressSchema,
+  paymentMethod: z.enum(PAYMENT_METHOD),
+  paymentResult: z.json().nullish(),
+  itemsPrice: money,
+  shippingPrice: money,
+  taxPrice: money,
+  totalPrice: money,
+  isPaid: z.boolean().default(false),
+  paidAt: z.iso.datetime().nullish(),
+  isDelivered: z.boolean().default(false),
+  deliveredAt: z.iso.datetime().nullish()
+});
+
+export const orderItemSchema = z.object({
+  orderId: z.uuid(),
+  productId: z.uuid(),
+  name: z.string().trim().min(3, "Product name must be at least 3 characters."),
+  slug: z.string().trim().min(3, "Slug must be at least 3 characters."),
+  quantity: z.int().nonnegative("Quantity must be a positive number."),
+  image: z.string().min(1, "Image is required."),
+  price: money
+});
+
+export const orderRecord = dbRecordSchema.extend(orderSchema.shape).extend({
+  orderItems: z.array(orderItemSchema),
+  user: z.object({
+    name: z.string(),
+    email: z.email()
+  })
 });

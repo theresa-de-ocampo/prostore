@@ -7,7 +7,10 @@ import {
   cartRecord,
   productRecord,
   shippingAddressSchema,
-  paymentMethodSchema
+  paymentMethodSchema,
+  orderSchema,
+  orderItemSchema,
+  orderRecord
 } from "@/lib/validators";
 
 export type Product = z.infer<typeof productSchema>;
@@ -18,3 +21,6 @@ export type CartRecord = z.infer<typeof cartRecord>;
 export type CartCookie = z.infer<typeof cartCookieSchema>;
 export type ShippingAddress = z.infer<typeof shippingAddressSchema>;
 export type PaymentMethod = z.infer<typeof paymentMethodSchema>;
+export type OrderItem = z.infer<typeof orderItemSchema>;
+export type Order = z.infer<typeof orderSchema>;
+export type OrderRecord = z.infer<typeof orderRecord>;

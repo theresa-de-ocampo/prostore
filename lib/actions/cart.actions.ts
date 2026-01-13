@@ -17,7 +17,7 @@ export async function getCartCookie() {
   }
 
   const session = await auth();
-  const userId = session?.user?.id;
+  const userId = session?.user?.id || null;
 
   return {
     sessionCartId,
@@ -90,7 +90,7 @@ export async function getCart({
   userId
 }: {
   sessionCartId: string;
-  userId: string | undefined;
+  userId: string | null;
 }) {
   const cart = await prisma.cart.findFirst({
     where: userId ? { userId } : { sessionCartId }
