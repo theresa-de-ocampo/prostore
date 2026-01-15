@@ -17,13 +17,13 @@ export default function CheckoutLayout({
 
     switch (pathname) {
       case "/checkout/shipping-address":
-        step = 1;
+        step = 0;
         break;
       case "/checkout/payment-method":
-        step = 2;
+        step = 1;
         break;
       case "/checkout/place-order":
-        step = 3;
+        step = 2;
         break;
       default:
         step = 0;
@@ -48,7 +48,7 @@ export default function CheckoutLayout({
             >
               {step}
             </div>
-            {step !== "Place Order" && <hr className="w-16 border-2" />}
+            {step !== "Place Order" && <hr className="w-16 border" />}
           </React.Fragment>
         ))}
       </header>

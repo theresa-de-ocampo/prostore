@@ -23,30 +23,32 @@ export default function CartSummary({
   const router = useRouter();
 
   return (
-    <Card className="min-w-max">
-      <CardContent>
-        <p className="flex-between">
-          <span>
-            Subtotal (
-            {cart.items.reduce(
-              (totalItems, item) => totalItems + item.quantity,
-              0
-            )}
-            )
-          </span>
-          <span className="font-bold">${cart.itemsPrice}</span>
-        </p>
-      </CardContent>
-      <CardFooter>
-        <Button
-          disabled={isPending}
-          onClick={() =>
-            startTransition(() => router.push("/checkout/shipping-address"))
-          }
-        >
-          {isPending ? <Spinner /> : <ArrowRight />} Proceed to Checkout
-        </Button>
-      </CardFooter>
-    </Card>
+    <div>
+      <Card className="min-w-max">
+        <CardContent>
+          <p className="flex-between">
+            <span>
+              Subtotal (
+              {cart.items.reduce(
+                (totalItems, item) => totalItems + item.quantity,
+                0
+              )}
+              )
+            </span>
+            <span className="font-bold">${cart.itemsPrice}</span>
+          </p>
+        </CardContent>
+        <CardFooter>
+          <Button
+            disabled={isPending}
+            onClick={() =>
+              startTransition(() => router.push("/checkout/shipping-address"))
+            }
+          >
+            {isPending ? <Spinner /> : <ArrowRight />} Proceed to Checkout
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
   );
 }
