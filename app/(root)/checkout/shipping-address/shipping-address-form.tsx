@@ -54,7 +54,7 @@ export default function ShippingAddressForm({
       const response = await updateUserAddress(userId, data);
 
       if (response.success) {
-        router.push("/payment-method");
+        router.push("/checkout/payment-method");
       } else {
         toast.error(response.message);
       }

@@ -50,10 +50,9 @@ export default function PaymentMethodForm({
   function onSubmit(data: PaymentMethod) {
     startTransition(async () => {
       const response = await updateUserPaymentMethod(data);
-      console.log(response);
 
       if (response.success) {
-        router.push("/place-order");
+        router.push("/checkout/place-order");
       } else {
         toast.error(response.message);
       }
