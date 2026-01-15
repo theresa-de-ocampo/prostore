@@ -37,20 +37,41 @@ export default function CheckoutLayout({
 
   return (
     <>
-      <header className="flex flex-col flex-between md:flex-row mt-5 mb-8 md:mb-11">
-        {CHECKOUT_PAGES.map((step, index) => (
-          <React.Fragment key={index}>
-            <div
-              className={cn(
-                "p-2 w-56 text-center rounded-full",
-                index === currentStep ? "bg-secondary" : ""
-              )}
-            >
-              {step}
-            </div>
-            {step !== "Place Order" && <hr className="w-16 border" />}
-          </React.Fragment>
-        ))}
+      <header className="mt-6 mb-9 md:mb-11">
+        <ol className="flex flex-col gap-3 md:flex-row md:items-center justify-center md:gap-0">
+          {CHECKOUT_PAGES.map((step, index) => {
+            const isActive = index === currentStep;
+
+            return (
+              <React.Fragment key={index}>
+                <li
+                  aria-current={isActive ? "step" : undefined}
+                  className={cn(
+                    "flex items-center gap-3 rounded-full border px-4 py-2 text-sm font-medium transition-colors",
+                    isActive
+                      ? "border-gray-500 bg-secondary text-foreground"
+                      : "border-border text-muted-foreground"
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "flex h-7 w-7 items-center justify-center rounded-full border text-xs",
+                      isActive
+                        ? "border-gray-500 bg-background text-foreground"
+                        : "border-border text-muted-foreground"
+                    )}
+                  >
+                    {index + 1}
+                  </span>
+                  <span className="whitespace-nowrap">{step}</span>
+                </li>
+                {step !== "Place Order" && (
+                  <hr className="hidden md:block w-12 border-border" />
+                )}
+              </React.Fragment>
+            );
+          })}
+        </ol>
       </header>
 
       {children}
