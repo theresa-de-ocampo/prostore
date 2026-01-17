@@ -1,17 +1,17 @@
+import { redirect } from "next/navigation";
+
+// * Components
+import Link from "next/link";
+import Image from "next/image";
+import PlaceOrderForm from "./place-order-form";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle
 } from "@/components/ui/card";
-import { getCart, getCartCookie } from "@/lib/actions/cart.actions";
-import { getUserById } from "@/lib/actions/user.actions";
-import { ShippingAddress } from "@/types";
-import Link from "next/link";
-import { redirect } from "next/navigation";
 import { EditIcon } from "lucide-react";
 import {
   Table,
@@ -21,7 +21,13 @@ import {
   TableCell,
   TableRow
 } from "@/components/ui/table";
-import Image from "next/image";
+
+// * Actions
+import { getCart, getCartCookie } from "@/lib/actions/cart.actions";
+import { getUserById } from "@/lib/actions/user.actions";
+
+// * Types
+import { ShippingAddress } from "@/types";
 
 export const metadata = {
   title: "Place Order"
@@ -103,7 +109,7 @@ export default async function PlaceOrderPage() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Items</TableHead>
-                    <TableHead>Quantity</TableHead>
+                    <TableHead>Qty</TableHead>
                     <TableHead>Price</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -124,7 +130,7 @@ export default async function PlaceOrderPage() {
                       </TableCell>
                       <TableCell>{item.quantity}</TableCell>
                       <TableCell className="text-center">
-                        {item.price}
+                        ${item.price}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -156,7 +162,7 @@ export default async function PlaceOrderPage() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Place Order</Button>
+              <PlaceOrderForm />
             </CardFooter>
           </Card>
         </div>

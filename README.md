@@ -57,6 +57,8 @@ If you have a separate back-end (Node.js), Server Actions isn't needed.
 
 So: default rendering ≠ server actions. You can move "use server" to specific exported functions instead of the whole file, but you need it somewhere in scope for actions.
 
+<!-- #endregion ONE -->
+
 ## 2. App Creation & Basic Layout
 
 ### 2.1. Create Next App & Assets
@@ -395,6 +397,26 @@ export { auth as proxy } from "@/auth";
 The `authorized` callback in NextAuth is designed to control access to routes. When it returns `false`, NextAuth automatically redirects the user to the `signIn` page specified in the `pages` configuration.
 
 It also automatically includes a `callbackUrl` query parameter.
+
+## 7. Payment Method & Order Pages
+
+### 7.1. `useFormStatus` without `useActionState`
+
+There was no:
+
+```javascript
+const [data, action] = useActionState(createOrder, {
+  success: false,
+  message: "",
+  redirectTo: undefined
+});
+```
+
+at [Placed Order Form](<app/(root)/checkout/place-order/place-order-form.tsx>) because you have to handle the redirects.
+
+Unlike with the [Sign-Up Form](<app/(auth)/sign-up/sign-up-form.tsx>), `useActionState` was used since NextAuth already took care of the redirect on `success`.
+
+Note that `useFormStatus` can run both on client and server components. On the other hand, `useActionState` can only run on the client.
 
 ## 19. What server means in Next.js
 
