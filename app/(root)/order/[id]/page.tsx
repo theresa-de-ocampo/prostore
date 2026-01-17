@@ -1,11 +1,14 @@
 import { notFound } from "next/navigation";
 import { getOrderById } from "@/lib/actions/order.actions";
 
+// * Components
+import OrderDetails from "./order-details";
+
 export const metadata = {
   title: "Order Details"
 };
 
-export default async function OrderDetailsPage(props: {
+export default async function OrderPage(props: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = await props.params;
@@ -18,6 +21,7 @@ export default async function OrderDetailsPage(props: {
   return (
     <section>
       <h2>Order Details</h2>
+      {/* <OrderDetails order={order} /> */}
     </section>
   );
 }

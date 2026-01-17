@@ -16,7 +16,7 @@ const money = z.coerce
 
 const dbRecordSchema = z.object({
   id: z.uuid(),
-  createdAt: z.iso.datetime()
+  createdAt: z.date()
 });
 
 export const productSchema = z.object({

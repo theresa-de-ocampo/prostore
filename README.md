@@ -418,11 +418,73 @@ Unlike with the [Sign-Up Form](<app/(auth)/sign-up/sign-up-form.tsx>), `useActio
 
 Note that `useFormStatus` can run both on client and server components. On the other hand, `useActionState` can only run on the client.
 
-### 7.1. When to use `convertToPlainObject`?
+## 7.2. `convertToPlainObject`
 
-Some `getByX` makes use of `convertToPlainObject`, while others don't. If the Prisma response returns a decimal, use `convertToPlainObject`.
+It's supposed to convert a Prisma object into a regular JavaScript object. However, the conversion only happens at **runtime**.
 
-`getProductBySlug` didn't use `convertToPlainObject` even though the response contains a `price` property because this was already handled at [client instantiation](db/prisma.ts).
+At runtime, `Decimal` and `Date` does become a string.
+
+But the function signature is `convertToPlainObject<T>(value: T): T`, so TypeScript still thinks the return type is the original Prisma type (`Decimal`, `Date`, etc.).
+
+Initially, you had this code:
+
+```typescript
+export async function getCart({
+  sessionCartId,
+  userId
+}: {
+  sessionCartId: string;
+  userId: string | null;
+}) {
+  const cart = await prisma.cart.findFirst({
+    where: userId ? { userId } : { sessionCartId }
+  });
+
+  let validatedCart = undefined;
+
+  const test = convertToPlainObject(cart);
+  const testPrice = test?.itemsPrice;
+
+  if (cart) {
+    validatedCart = cartRecord.parse(convertToPlainObject(cart));
+  }
+
+  return validatedCart;
+}
+```
+
+When you hover over `testPrice`, its type is `Decimal`. Now, `cartRecord.parse` expects a type `string` for `cart.price`. The fact that is is working means that the runtime conversion occurs.
+
+When you remove `convertToPlainObject`, there's no TypeScript errors from the editor.
+
+```typescript
+export async function getCart({
+  sessionCartId,
+  userId
+}: {
+  sessionCartId: string;
+  userId: string | null;
+}) {
+  const cart = await prisma.cart.findFirst({
+    where: userId ? { userId } : { sessionCartId }
+  });
+
+  let validatedCart = undefined;
+
+  if (cart) {
+    validatedCart = cartRecord.parse(cart);
+  }
+
+  return validatedCart;
+```
+
+But it throws `invalidType` as soon as `getCart` is called.
+
+So far, we've been getting around this static type issue by parsing with the Zod schema. We have this `money` utility that automatically converts `Decimal` into strings.
+
+But a better way to do this is to use Prisma's `$extends`. For instance, in the previous code, it does not make sense to validate the cart that we just fetched from the database.
+
+But we can't just fully omit `convertToPlainObject` because there's still `JsonValue[]`.
 
 ## 19. What server means in Next.js
 
