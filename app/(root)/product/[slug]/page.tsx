@@ -1,11 +1,15 @@
-import { getProductBySlug } from "@/lib/actions/product.actions";
 import { notFound } from "next/navigation";
-import ProductPrice from "@/components/shared/product/product-price";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import ProductImages from "@/components/shared/product/product-images";
+
+// * Components
 import CartItemControls from "@/components/shared/cart/cart-item-controls";
+import ProductImages from "@/components/shared/product/product-images";
+import ProductPrice from "@/components/shared/product/product-price";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+
+// * Actions
 import { getCartCookie, getCart } from "@/lib/actions/cart.actions";
+import { getProductBySlug } from "@/lib/actions/product.actions";
 
 export default async function ProductDetailsPage(props: {
   params: Promise<{ slug: string }>;

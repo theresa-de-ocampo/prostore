@@ -418,6 +418,12 @@ Unlike with the [Sign-Up Form](<app/(auth)/sign-up/sign-up-form.tsx>), `useActio
 
 Note that `useFormStatus` can run both on client and server components. On the other hand, `useActionState` can only run on the client.
 
+### 7.1. When to use `convertToPlainObject`?
+
+Some `getByX` makes use of `convertToPlainObject`, while others don't. If the Prisma response returns a decimal, use `convertToPlainObject`.
+
+`getProductBySlug` didn't use `convertToPlainObject` even though the response contains a `price` property because this was already handled at [client instantiation](db/prisma.ts).
+
 ## 19. What server means in Next.js
 
 In Next.js, _server_ refers to the runtime environment where server code executes — things like:

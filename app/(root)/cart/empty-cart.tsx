@@ -3,9 +3,9 @@ import { APP_NAME } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-export default function NotFound() {
+export default function EmptyCart() {
   return (
-    <main className="flex-center flex-col min-h-full">
+    <div className="flex-center flex-col min-h-full">
       <Image
         src="/images/logo.svg"
         alt={`${APP_NAME} Logo`}
@@ -14,12 +14,11 @@ export default function NotFound() {
         priority
       />
       <div className="text-center p-6 shadow-md w-max lg:w-1/3">
-        <h2 className="text-3xl font-bold mb-4">Not Found</h2>
-        <p className="text-destructive">Could not find requested page</p>
+        <h3>Empty Cart</h3>
         <Button asChild variant="outline" className="m-4">
-          <Link href="/">Back to Home</Link>
+          <Link href="/">View Products</Link>
         </Button>
       </div>
-    </main>
+    </div>
   );
 }

@@ -123,6 +123,10 @@
   h2 {
     @apply font-bold text-xl lg:text-2xl;
   }
+
+  h3 {
+    @apply font-bold text-lg lg:text-xl;
+  }
 }
 
 @utility wrapper {
