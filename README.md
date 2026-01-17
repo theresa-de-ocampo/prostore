@@ -51,6 +51,12 @@ If your handlers are just external API calls, just group them into custom hooks.
 
 If you have a separate back-end (Node.js), Server Actions isn't needed.
 
+### 1.4 When to use `"use server"`?
+
+`"use server"` is necessary for [server action](lib/actions). In Next.js App Router, components are Server Components by default, but server actions require the "use server" directive to mark the module (or individual functions) as server-only and to enable invocation from the client. Without it, these action exports won’t be treated as server actions and won’t be callable from client components or forms.
+
+So: default rendering ≠ server actions. You can move "use server" to specific exported functions instead of the whole file, but you need it somewhere in scope for actions.
+
 ## 2. App Creation & Basic Layout
 
 ### 2.1. Create Next App & Assets

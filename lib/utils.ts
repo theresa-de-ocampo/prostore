@@ -1,6 +1,15 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+export class RedirectableError extends Error {
+  redirectTo: string;
+
+  constructor(message: string, redirectTo: string) {
+    super(message);
+    this.redirectTo = redirectTo;
+  }
+}
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
