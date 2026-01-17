@@ -1,7 +1,6 @@
 import { getCartCookie, getCart } from "@/lib/actions/cart.actions";
 
 // * Components
-import Link from "next/link";
 import ShoppingCart from "./cart";
 import EmptyCart from "./empty-cart";
 
