@@ -21,7 +21,7 @@ export default async function OrderPage(props: {
   return (
     <section>
       <h2>Order Details</h2>
-      {/* <OrderDetails order={order} /> */}
+      <OrderDetails order={order} />
     </section>
   );
 }

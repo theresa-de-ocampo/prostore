@@ -9,8 +9,8 @@ import { getCartCookie, getCart } from "./cart.actions";
 import { getUserById } from "./user.actions";
 
 // * Helpers
-import { convertToPlainObject, formatError, RedirectableError } from "../utils";
-import { orderItemSchema, orderSchema } from "../validators";
+import { formatError, RedirectableError } from "../utils";
+import { orderItemSchema, orderRecord, orderSchema } from "../validators";
 
 export async function createOrder() {
   let response;
@@ -132,5 +132,11 @@ export async function getOrderById(orderId: string) {
     }
   });
 
-  return convertToPlainObject(order);
+  let validatedOrder = undefined;
+
+  if (order) {
+    validatedOrder = orderRecord.parse(order);
+  }
+
+  return validatedOrder;
 }

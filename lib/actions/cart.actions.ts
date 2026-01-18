@@ -99,7 +99,7 @@ export async function getCart({
   let validatedCart = undefined;
 
   if (cart) {
-    validatedCart = cartRecord.parse(convertToPlainObject(cart));
+    validatedCart = cartRecord.parse(cart);
   }
 
   return validatedCart;
