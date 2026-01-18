@@ -72,7 +72,7 @@ export function formatError(error: any) {
 }
 
 export function formatId(id: string) {
-  return `...${id.substring(id.length - 6)}`;
+  return id.substring(id.length - 6);
 }
 
 export function formatDateTime(dateString: Date) {

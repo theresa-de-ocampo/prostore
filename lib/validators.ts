@@ -113,9 +113,9 @@ export const orderItemSchema = cartItemSchema.extend({
 export const orderRecord = dbRecordSchema.extend(orderSchema.shape).extend({
   paymentResult: z.json().nullish(),
   isPaid: z.boolean().default(false),
-  paidAt: z.iso.datetime().nullish(),
+  paidAt: z.date().nullable(),
   isDelivered: z.boolean().default(false),
-  deliveredAt: z.iso.datetime().nullish(),
+  deliveredAt: z.date().nullable(),
   orderItems: z.array(orderItemSchema),
   user: z.object({
     name: z.string(),

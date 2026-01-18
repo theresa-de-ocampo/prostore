@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getOrderById } from "@/lib/actions/order.actions";
+import { formatId } from "@/lib/utils";
 
 // * Components
 import OrderDetails from "./order-details";
@@ -19,8 +20,8 @@ export default async function OrderPage(props: {
   }
 
   return (
-    <section>
-      <h2>Order Details</h2>
+    <section className="max-w-5xl mx-auto">
+      <h2>Order {formatId(id)}</h2>
       <OrderDetails order={order} />
     </section>
   );
