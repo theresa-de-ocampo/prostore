@@ -511,6 +511,59 @@ export async function addToCart(data: CartItem) {
 
 Convert what is convertible via $extends, use Zod for the rest.
 
+## 8. PayPal Payments
+
+### 8.1. Axios for Next.js?
+
+Initially, you used `axios` instead of `fetch`.
+
+```javascript
+await client.post(
+  "/v1/oauth2/token",
+  new URLSearchParams({ grant_type: "client_credentials" }),
+  {
+    auth: {
+      username: PAYPAL_CLIENT_ID,
+      password: PAYPAL_CLIENT_SECRET
+    },
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
+  }
+);
+```
+
+However, Next.js has optimizations directly intended for `fetch` such as:
+
+- Deduplicate Requests
+- Cache Responses
+- Revalidate Automatically
+- Understand Request Lifecycles
+
+```javascript
+await fetch(url, {
+  next: { revalidate: 300 }
+});
+```
+
+**References**:
+
+- [Caching fetch requests](https://nextjs.org/docs/app/getting-started/caching-and-revalidating#fetch)
+- [Caching does not work with axios](https://github.com/vercel/next.js/discussions/63221)
+
+### 8.1 `new URLSearchParams()`
+
+In the current code to get the access token, the body could also be set in any of the following:
+
+```javascript
+new URLSearchParams({ grant_type: "client_credentials" });
+```
+
+```javascript
+const body = new URLSearchParams();
+body.set("grant_type", "client_credentials");
+```
+
 ## 19. What server means in Next.js
 
 In Next.js, _server_ refers to the runtime environment where server code executes — things like:
