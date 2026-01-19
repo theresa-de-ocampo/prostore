@@ -4,6 +4,15 @@ if (!BASE_URL) {
   throw new Error("PayPal API URL must be defined.");
 }
 
+async function handleResponse(response: Response) {
+  if (!response.ok) {
+    const errorMessage = await response.text();
+    throw new Error(`${response.status} ${errorMessage}`);
+  }
+
+  return response.json();
+}
+
 async function generateAccessToken() {
   const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = process.env;
 
@@ -28,14 +37,56 @@ async function generateAccessToken() {
     }
   });
 
-  if (!response.ok) {
-    const errorMessage = await response.text();
-    throw new Error(
-      `PayPal token request failed: ${response.status} ${errorMessage}`
-    );
-  }
-
-  const data = await response.json();
+  const data = await handleResponse(response);
 
   return data.access_token;
 }
+
+async function createOrder(price: number) {
+  const accessToken = await generateAccessToken();
+
+  const response = await fetch(`${BASE_URL}/v2/checkout/orders`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`
+    },
+    body: JSON.stringify({
+      intent: "CAPTURE",
+      purchase_units: [
+        {
+          amount: {
+            currency_code: "USD",
+            value: price.toFixed(2)
+          }
+        }
+      ]
+    })
+  });
+
+  return handleResponse(response);
+}
+
+async function capturePayment(orderId: string) {
+  const accessToken = await generateAccessToken();
+
+  const response = await fetch(
+    `${BASE_URL}/v2/checkout/orders/${orderId}/capture`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`
+      }
+    }
+  );
+
+  return handleResponse(response);
+}
+
+export { generateAccessToken };
+
+export const payPal = {
+  createOrder,
+  capturePayment
+};
