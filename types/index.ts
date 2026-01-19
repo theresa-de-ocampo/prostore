@@ -10,7 +10,8 @@ import {
   paymentMethodSchema,
   orderSchema,
   orderItemSchema,
-  orderRecord
+  orderRecord,
+  paymentResultSchema
 } from "@/lib/validators";
 
 export type Product = z.infer<typeof productSchema>;
@@ -24,3 +25,4 @@ export type PaymentMethod = z.infer<typeof paymentMethodSchema>;
 export type OrderItem = z.infer<typeof orderItemSchema>;
 export type Order = z.infer<typeof orderSchema>;
 export type OrderRecord = z.infer<typeof orderRecord>;
+export type PaymentResult = z.infer<typeof paymentResultSchema>;

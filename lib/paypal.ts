@@ -42,7 +42,7 @@ async function generateAccessToken() {
   return data.access_token;
 }
 
-async function createOrder(price: number) {
+async function createOrder(price: string) {
   const accessToken = await generateAccessToken();
 
   const response = await fetch(`${BASE_URL}/v2/checkout/orders`, {
@@ -57,7 +57,7 @@ async function createOrder(price: number) {
         {
           amount: {
             currency_code: "USD",
-            value: price.toFixed(2)
+            value: price
           }
         }
       ]

@@ -122,3 +122,10 @@ export const orderRecord = dbRecordSchema.extend(orderSchema.shape).extend({
     email: z.email()
   })
 });
+
+export const paymentResultSchema = z.object({
+  id: z.string(),
+  status: z.string(),
+  email_address: z.string(),
+  pricePaid: z.string()
+});

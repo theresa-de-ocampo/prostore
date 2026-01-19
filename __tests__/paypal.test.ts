@@ -7,7 +7,7 @@ test("generates token from paypal", async () => {
 });
 
 test("creates a paypal order", async () => {
-  const response = await payPal.createOrder(10);
+  const response = await payPal.createOrder("10.00");
   console.dir(response, { depth: null });
   expect(response.id).toBeDefined();
   expect(response.status).toBe("CREATED");

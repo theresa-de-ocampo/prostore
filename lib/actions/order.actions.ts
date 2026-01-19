@@ -3,6 +3,7 @@
 import { auth } from "@/auth";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { prisma } from "@/db/prisma";
+import { revalidatePath } from "next/cache";
 
 // * Actions
 import { getCartCookie, getCart } from "./cart.actions";
@@ -11,6 +12,7 @@ import { getUserById } from "./user.actions";
 // * Helpers
 import { formatError, RedirectableError } from "../utils";
 import { orderItemSchema, orderRecord, orderSchema } from "../validators";
+import { payPal } from "../paypal";
 
 export async function createOrder() {
   let response;
@@ -139,4 +141,42 @@ export async function getOrderById(orderId: string) {
   }
 
   return validatedOrder;
+}
+
+export async function createPayPalOrder(orderId: string) {
+  let response;
+
+  try {
+    const order = await getOrderById(orderId);
+
+    if (!order) {
+      throw new Error("Order not found.");
+    }
+
+    const payPalOrder = await payPal.createOrder(order.totalPrice);
+
+    await prisma.order.update({
+      where: {
+        id: order.id
+      },
+      data: {
+        paymentResult: {
+          id: payPalOrder.id,
+          status: "",
+          email_address: "",
+          pricePaid: 0
+        }
+      }
+    });
+
+    response = {
+      success: true,
+      message: "PayPal order created successfully.",
+      data: payPalOrder.id
+    };
+  } catch (error) {
+    response = { success: false, message: formatError(error) };
+  }
+
+  return response;
 }
