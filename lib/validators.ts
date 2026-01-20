@@ -110,22 +110,50 @@ export const orderItemSchema = cartItemSchema.extend({
   orderId: z.uuid()
 });
 
-export const orderRecord = dbRecordSchema.extend(orderSchema.shape).extend({
-  paymentResult: z.json().nullish(),
-  isPaid: z.boolean().default(false),
-  paidAt: z.date().nullable(),
-  isDelivered: z.boolean().default(false),
-  deliveredAt: z.date().nullable(),
-  orderItems: z.array(orderItemSchema),
-  user: z.object({
-    name: z.string(),
-    email: z.email()
-  })
-});
-
 export const paymentResultSchema = z.object({
   id: z.string(),
   status: z.string(),
-  email_address: z.string(),
+  email: z.string(),
   pricePaid: z.string()
 });
+
+export const orderRecord = dbRecordSchema
+  .extend(orderSchema.shape)
+  .extend({
+    paymentResult: paymentResultSchema.nullish(),
+    isPaid: z.boolean().default(false),
+    paidAt: z.date().nullable(),
+    isDelivered: z.boolean().default(false),
+    deliveredAt: z.date().nullable(),
+    orderItems: z.array(orderItemSchema),
+    user: z.object({
+      name: z.string(),
+      email: z.email()
+    })
+  })
+  .superRefine((data, ctx) => {
+    if (
+      data.paymentMethod === PAYMENT_METHOD.PAYPAL &&
+      data.isPaid === true &&
+      !data.paymentResult
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["paymentResult"],
+        message: "Payment result is required when a PayPal order is paid."
+      });
+    }
+
+    if (
+      data.paymentMethod === PAYMENT_METHOD.PAYPAL &&
+      data.isPaid === true &&
+      data.paymentResult?.status !== "COMPLETED"
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["paymentResult", "status"],
+        message:
+          "PayPal payment status must be COMPLETED when an order is paid."
+      });
+    }
+  });
