@@ -1,10 +1,9 @@
-"use client";
-
 // * Components
 import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import PriceSummary from "./price-summary";
 import {
   Table,
   TableHeader,
@@ -24,13 +23,9 @@ export default function OrderDetails({ order }: { order: OrderRecord }) {
   const {
     isDelivered,
     isPaid,
-    itemsPrice,
     orderItems,
     paymentMethod,
     shippingAddress,
-    shippingPrice,
-    taxPrice,
-    totalPrice,
     user,
     paidAt,
     deliveredAt
@@ -54,11 +49,13 @@ export default function OrderDetails({ order }: { order: OrderRecord }) {
               </p>
             </div>
             {isDelivered && deliveredAt ? (
-              <Badge variant="secondary">
+              <Badge variant="secondary" className="self-end">
                 Delivered at {formatDateTime(deliveredAt).dateTime}
               </Badge>
             ) : (
-              <Badge variant="destructive">Not Delivered</Badge>
+              <Badge variant="destructive" className="self-end">
+                Not Delivered
+              </Badge>
             )}
           </CardContent>
         </Card>
@@ -117,26 +114,7 @@ export default function OrderDetails({ order }: { order: OrderRecord }) {
         </Card>
       </div>
       <div>
-        <Card>
-          <CardContent>
-            <div className="flex-between">
-              <div>Items</div>
-              <div>${itemsPrice}</div>
-            </div>
-            <div className="flex-between">
-              <div>Tax</div>
-              <div>${taxPrice}</div>
-            </div>
-            <div className="flex-between">
-              <div>Shipping</div>
-              <div>{shippingPrice === "0.00" ? "Free" : shippingPrice}</div>
-            </div>
-            <div className="flex-between font-bold">
-              <div>Total Price</div>
-              <div>${totalPrice}</div>
-            </div>
-          </CardContent>
-        </Card>
+        <PriceSummary order={order} />
       </div>
     </div>
   );

@@ -112,9 +112,9 @@ export const orderItemSchema = cartItemSchema.extend({
 
 export const paymentResultSchema = z.object({
   id: z.string(),
-  status: z.string(),
-  email: z.string(),
-  pricePaid: z.string()
+  status: z.string().nullish(),
+  email: z.string().nullish(),
+  pricePaid: money.nullish()
 });
 
 export const orderRecord = dbRecordSchema

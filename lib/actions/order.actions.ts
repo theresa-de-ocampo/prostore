@@ -13,7 +13,6 @@ import { getUserById } from "./user.actions";
 import { formatError, RedirectableError } from "../utils";
 import { orderItemSchema, orderRecord, orderSchema } from "../validators";
 import { payPal } from "../paypal";
-import { PaymentResult } from "@/types";
 
 export async function createOrder() {
   let response;

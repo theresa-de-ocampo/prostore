@@ -169,3 +169,97 @@ jest.mock("./models/user");
 ```
 
 Read more from [Jest Docs](https://jestjs.io/docs/manual-mocks).
+
+## 8.6. `purchase_units`
+
+The value set at `purchase_units` represent the total price of the cart instead of creating a price breakdown per order item. The following lists scenarios when `purchase_units` > 1 actually makes sense:
+
+### 8.6.1. MarketPlace
+
+This is useful for a marketplace like SM Eats where:
+
+- Buyer checks out once.
+- Order contains items from multiple sellers.
+- Each seller needs their own payout and invoice
+
+```json
+{
+  "intent": "CAPTURE",
+  "purchase_units": [
+    {
+      "reference_id": "seller-A",
+      "invoice_id": "invoice-a",
+      "payee": {
+        "merchant_id": "MERCHANT_ID_A"
+      },
+      "amount": {
+        "currency_code": "USD",
+        "value": "20.00"
+      }
+    },
+    {
+      "reference_id": "seller-B",
+      "invoice_id": "invoice-b",
+      "payee": {
+        "merchant_id": "MERCHANT_ID_B"
+      },
+      "amount": {
+        "currency_code": "USD",
+        "value": "15.00"
+      }
+    }
+  ]
+}
+```
+
+### 8.6.2. Partial Capture / Staged Fullfillments
+
+This is useful when you to track shipping separately where:
+
+- **PU#1**: In-Stock Items ship today.
+- **PU#2**: Backorder Items ship next week.
+
+```json
+{
+  "intent": "AUTHORIZE",
+  "purchase_units": [
+    {
+      "reference_id": "SHIP_NOW",
+      "custom_id": "internal-shipment-001",
+      "amount": { "currency_code": "USD", "value": "35.00" },
+      "items": [
+        {
+          "name": "Coffee Beans 1kg",
+          "quantity": "1",
+          "unit_amount": { "currency_code": "USD", "value": "35.00" }
+        }
+      ]
+    },
+    {
+      "reference_id": "SHIP_LATER",
+      "custom_id": "internal-shipment-002",
+      "amount": { "currency_code": "USD", "value": "120.00" },
+      "items": [
+        {
+          "name": "Limited Coffee Machine",
+          "quantity": "1",
+          "unit_amount": { "currency_code": "USD", "value": "120.00" }
+        }
+      ]
+    }
+  ],
+  "application_context": {
+    "return_url": "https://example.com/paypal/return",
+    "cancel_url": "https://example.com/paypal/cancel"
+  }
+}
+```
+
+The response from `https://api-m.sandbox.paypal.com/v2/checkout/orders/{id}/track` would then have separate links per purchase unit.
+
+Note that that example would have a different flow for capturing payments:
+
+- Use `intent: "AUTHORIZE"` when creating the order.
+- After the buyer approves, call `/v2/checkout/orders/{id}/authorize`.
+- PayPal returns separate authorization IDs per purchase unit.
+- Capture each authorization later via the Payments v2 API (`/v2/payments/authorizations/{authorization_id}/capture`).
