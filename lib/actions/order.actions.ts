@@ -248,3 +248,39 @@ export async function approvePayPalOrder(orderId: string) {
 
   return response;
 }
+
+export async function getMyOrders({
+  page,
+  limit = 5
+}: {
+  page: number;
+  limit?: number;
+}) {
+  const session = await auth();
+
+  if (!session?.user?.id) {
+    throw new Error("User is not authenticated.");
+  }
+
+  const data = await prisma.order.findMany({
+    where: {
+      userId: session.user.id
+    },
+    orderBy: {
+      createdAt: "desc"
+    },
+    take: limit,
+    skip: (page - 1) * limit
+  });
+
+  const dataCount = await prisma.order.count({
+    where: {
+      userId: session.user.id
+    }
+  });
+
+  return {
+    data,
+    totalPages: Math.ceil(dataCount / limit)
+  };
+}

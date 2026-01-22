@@ -44,6 +44,16 @@ export default async function UserButton() {
             {session.user.email}
           </p>
         </DropdownMenuLabel>
+        <DropdownMenuItem>
+          <Link href="/user/profile" className="w-full">
+            Profile
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="/user/orders" className="w-full">
+            Order History
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem asChild className="py-0 px-2">
           <form action={logOut}>
             <Button variant="ghost" className="w-full h-8 justify-start p-0">

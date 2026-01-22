@@ -5,7 +5,11 @@ import { APP_NAME } from "@/lib/constants";
 // * Components
 import Menu from "./menu";
 
-export default function Header() {
+export default function Header({
+  centerContent
+}: {
+  centerContent?: React.ReactNode;
+}) {
   return (
     <header className="flex-between border-b wrapper">
       <Link href="/" className="flex-start">
@@ -18,7 +22,7 @@ export default function Header() {
         />
         <h1 className="hidden lg:block text-2xl font-bold ml-3">{APP_NAME}</h1>
       </Link>
-
+      {centerContent}
       <Menu />
     </header>
   );
