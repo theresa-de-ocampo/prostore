@@ -42,3 +42,22 @@ It will throw `Type 'Decimal' is not assignable to type 'string'`. Note that eve
 ## 3.4. Product Details Page
 
 Aside from using `props.params`, you can also use `useRouter`.
+
+## 3.5. `Could not find module query_compiler_fast_bg.postgresql.wasm-base64.js`
+
+```bash
+Loaded Prisma config from prisma.config.ts.
+
+Prisma schema loaded from prisma\schema.prisma.
+Error:
+Cannot find module 'C:\Users\Therese\repositories\01-personal\learnings\prostore-vercel\node_modules\@prisma\client\runtime\query_compiler_fast_bg.postgresql.wasm-base64.js'
+Require stack:
+- C:\Users\Therese\repositories\01-personal\learnings\prostore-vercel\node_modules\prisma\build\index.js
+```
+
+If you get this error, just lock the prisma version. That is, remove `^` from `package.json`.
+
+- `@prisma/client`
+- `prisma`
+
+The error is consistent with a Prisma version mismatch pulling a different runtime layout.
