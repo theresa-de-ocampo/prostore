@@ -17,3 +17,10 @@ export enum PAYMENT_METHOD {
   STRIPE = "Stripe",
   CASH_ON_DELIVERY = "CashOnDelivery"
 }
+
+export const KNOWLEDGE_DOC_TYPES = [
+  "generic",
+  "shipping_delivery",
+  "returns_refunds",
+  "order_tracking"
+] as const;
