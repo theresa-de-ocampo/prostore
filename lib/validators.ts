@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { formatDecimal } from "./utils";
-import { KNOWLEDGE_DOC_TYPES, PAYMENT_METHOD } from "./constants";
+import { KNOWLEDGE_DOC_TYPE, PAYMENT_METHOD } from "./constants";
 
 const nullableString = z
   .string()
@@ -118,7 +118,7 @@ export const paymentResultSchema = z.object({
 });
 
 export const knowledgeDocSchema = z.object({
-  type: z.enum(KNOWLEDGE_DOC_TYPES),
+  type: z.nativeEnum(KNOWLEDGE_DOC_TYPE),
   body: z.string().trim().min(1, "Knowledge doc body is required.")
 });
 
