@@ -11,7 +11,9 @@ import {
   orderSchema,
   orderItemSchema,
   orderRecord,
-  paymentResultSchema
+  paymentResultSchema,
+  knowledgeDocSchema,
+  knowledgeDocRecord
 } from "@/lib/validators";
 
 export type Product = z.infer<typeof productSchema>;
@@ -26,3 +28,5 @@ export type OrderItem = z.infer<typeof orderItemSchema>;
 export type Order = z.infer<typeof orderSchema>;
 export type OrderRecord = z.infer<typeof orderRecord>;
 export type PaymentResult = z.infer<typeof paymentResultSchema>;
+export type KnowledgeDoc = z.infer<typeof knowledgeDocSchema>;
+export type KnowledgeDocRecord = z.infer<typeof knowledgeDocRecord>;

@@ -17,3 +17,10 @@ export enum PAYMENT_METHOD {
   STRIPE = "Stripe",
   CASH_ON_DELIVERY = "CashOnDelivery"
 }
+
+export enum KNOWLEDGE_DOC_TYPE {
+  GENERIC = "generic",
+  SHIPPING_DELIVERY = "shipping_delivery",
+  RETURNS_REFUNDS = "returns_refunds",
+  ORDER_TRACKING = "order_tracking"
+}
