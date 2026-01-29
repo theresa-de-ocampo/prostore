@@ -118,7 +118,7 @@ export const paymentResultSchema = z.object({
 });
 
 export const knowledgeDocSchema = z.object({
-  type: z.nativeEnum(KNOWLEDGE_DOC_TYPE),
+  type: z.enum(KNOWLEDGE_DOC_TYPE),
   body: z.string().trim().min(1, "Knowledge doc body is required.")
 });
 
