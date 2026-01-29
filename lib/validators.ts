@@ -117,6 +117,20 @@ export const paymentResultSchema = z.object({
   pricePaid: money.nullish()
 });
 
+export const knowledgeDocSchema = z.object({
+  type: z.enum([
+    "generic",
+    "shipping_delivery",
+    "returns_refunds",
+    "order_tracking"
+  ]),
+  body: z.string().trim().min(1, "Knowledge doc body is required.")
+});
+
+export const knowledgeDocRecord = dbRecordSchema.extend(
+  knowledgeDocSchema.shape
+);
+
 export const orderRecord = dbRecordSchema
   .extend(orderSchema.shape)
   .extend({
