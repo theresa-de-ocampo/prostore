@@ -133,3 +133,10 @@ model OrderItem {
 
   @@id([orderId, productId], map: "orderItem_orderId_productId_pk")
 }
+
+model KnowledgeDoc {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  type      String
+  body      String   @db.Text
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+}
