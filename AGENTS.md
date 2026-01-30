@@ -22,6 +22,7 @@
 ## Coding Style & Naming Conventions
 
 - TypeScript + React, 2-space indentation, double quotes, and semicolons (match existing files).
+- Do not use deprecated APIs (symbols marked with `@deprecated` in types).
 - Components use `PascalCase`; variables and functions use `camelCase`.
 - Route folders are kebab-case (e.g., `sign-in`, `shipping-address`).
 - Prefer Tailwind utility classes; keep global CSS in `assets/styles/globals.css`.
@@ -35,6 +36,7 @@
 
 ## Commit & Pull Request Guidelines
 
+- Before comitting changes, run: `npm run lint` and fix any errors or warnings.
 - Commit messages are short, imperative, and sometimes prefixed with a type (`docs:`, `fix:`).
 - PRs should include a clear summary, testing notes, and screenshots for UI changes.
 

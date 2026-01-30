@@ -5,7 +5,7 @@ import { Cart, CartRecord, CartItem, Product } from "@/types";
 import { formatError } from "../utils";
 import { auth } from "@/auth";
 import { prisma } from "@/db/prisma";
-import { convertToPlainObject, round } from "../utils";
+import { round } from "../utils";
 import { cartItemSchema, cartRecord } from "../validators";
 import { revalidatePath } from "next/cache";
 

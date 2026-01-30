@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "postinstall": "prisma generate",
     "test": "jest"
   },
@@ -55,7 +55,6 @@
     "zod": "^4.3.4"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
     "@prisma/client": "^7.2.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^20.19.30",
@@ -65,7 +64,7 @@
     "bufferutil": "^4.0.9",
     "dotenv": "^17.2.3",
     "eslint": "^9",
-    "eslint-config-next": "15.4.2",
+    "eslint-config-next": "^16.1.6",
     "jest": "^30.2.0",
     "prisma": "^7.2.0",
     "ts-jest": "^29.4.6",
