@@ -24,3 +24,26 @@ export enum KNOWLEDGE_DOC_TYPE {
   RETURNS_REFUNDS = "returns_refunds",
   ORDER_TRACKING = "order_tracking"
 }
+
+export const CONTEXT_SCOPE_MAP = [
+  {
+    type: "order_tracking",
+    terms: ["track", "tracking", "order"]
+  },
+  {
+    type: "returns_refunds",
+    terms: ["return", "refund", "exchange", "returned", "refunding"]
+  },
+  {
+    type: "shipping_delivery",
+    terms: [
+      "shipping",
+      "delivery",
+      "deliver",
+      "fee",
+      "fees",
+      "how long",
+      "ship"
+    ]
+  }
+];
