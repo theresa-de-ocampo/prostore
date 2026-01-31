@@ -13,21 +13,19 @@ export async function POST(req: Request) {
     const userInput = lastUserMessage.parts[0].text;
     const contextScopes = selectContextScopes(userInput);
     const knowledge = await loadContext(contextScopes);
-    console.log(knowledge);
 
     let system = knowledge.base;
 
     if (knowledge.matched.length > 0) {
-      system = `${system}\n\n${knowledge.matched.join("\n\n")}`;
+      system = `${system}\n\n${knowledge.matched.map((match) => match.content).join("\n\n")}`;
     }
 
-    console.log(system);
+    const result = streamText({
+      model: "openai/gpt-5-chat",
+      system,
+      messages: await convertToModelMessages(messages)
+    });
+
+    return result.toUIMessageStreamResponse();
   }
-
-  const result = streamText({
-    model: "openai/gpt-4.1",
-    messages: await convertToModelMessages(messages)
-  });
-
-  return result.toUIMessageStreamResponse();
 }
