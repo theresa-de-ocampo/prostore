@@ -13,6 +13,15 @@ export async function POST(req: Request) {
     const userInput = lastUserMessage.parts[0].text;
     const contextScopes = selectContextScopes(userInput);
     const knowledge = await loadContext(contextScopes);
+    console.log(knowledge);
+
+    let system = knowledge.base;
+
+    if (knowledge.matched.length > 0) {
+      system = `${system}\n\n${knowledge.matched.join("\n\n")}`;
+    }
+
+    console.log(system);
   }
 
   const result = streamText({
