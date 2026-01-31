@@ -1,9 +1,9 @@
 import { fuzzy } from "fast-fuzzy";
 import { CONTEXT_SCOPE_MAP } from "./constants";
 
-export function matchesTerm(term: string, candidate: string) {
-  const FUZZY_THRESHOLD = 0.75;
-  return fuzzy(term, candidate) >= FUZZY_THRESHOLD;
+export function matchesTerm(userInput: string, term: string) {
+  const FUZZY_THRESHOLD = 0.82;
+  return fuzzy(term, userInput) >= FUZZY_THRESHOLD;
 }
 
 export function selectContextScopes(userInput: string) {
