@@ -15,6 +15,7 @@ import {
 
 // * Utils
 import { formatDateTime } from "@/lib/utils";
+import { getRequestTimeZone } from "@/lib/server/timezone";
 
 // * Types
 import { OrderRecord } from "@/types";
@@ -30,6 +31,7 @@ export default function OrderDetails({ order }: { order: OrderRecord }) {
     paidAt,
     deliveredAt
   } = order;
+  const timeZone = getRequestTimeZone();
 
   return (
     <div className="grid md:grid-cols-3 gap-4 my-5">
@@ -50,7 +52,7 @@ export default function OrderDetails({ order }: { order: OrderRecord }) {
             </div>
             {isDelivered && deliveredAt ? (
               <Badge variant="secondary" className="self-end">
-                Delivered at {formatDateTime(deliveredAt).dateTime}
+                Delivered at {formatDateTime(deliveredAt, timeZone).dateTime}
               </Badge>
             ) : (
               <Badge variant="destructive" className="self-end">
@@ -69,7 +71,7 @@ export default function OrderDetails({ order }: { order: OrderRecord }) {
             </div>
             {isPaid && paidAt ? (
               <Badge variant="secondary">
-                Paid at {formatDateTime(paidAt).dateTime}
+                Paid at {formatDateTime(paidAt, timeZone).dateTime}
               </Badge>
             ) : (
               <Badge variant="destructive">Not Paid</Badge>

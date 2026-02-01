@@ -75,7 +75,11 @@ export function formatId(id: string) {
   return id.substring(id.length - 6);
 }
 
-export function formatDateTime(dateString: Date) {
+export function formatDateTime(
+  dateInput: Date | string,
+  timeZone?: string,
+  locale = "en-US"
+) {
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
     month: "short",
     year: "numeric",
@@ -98,20 +102,20 @@ export function formatDateTime(dateString: Date) {
     hour12: true
   };
 
-  const formattedDateTime: string = new Date(dateString).toLocaleString(
-    "en-US",
-    dateTimeOptions
-  );
+  const date = new Date(dateInput);
+  const withTimeZone = (options: Intl.DateTimeFormatOptions) =>
+    timeZone ? { ...options, timeZone } : options;
+  const formatWithFallback = (options: Intl.DateTimeFormatOptions) => {
+    try {
+      return new Intl.DateTimeFormat(locale, withTimeZone(options)).format(date);
+    } catch {
+      return new Intl.DateTimeFormat(locale, options).format(date);
+    }
+  };
 
-  const formattedDate: string = new Date(dateString).toLocaleString(
-    "en-US",
-    dateOptions
-  );
-
-  const formattedTime: string = new Date(dateString).toLocaleString(
-    "en-US",
-    timeOptions
-  );
+  const formattedDateTime = formatWithFallback(dateTimeOptions);
+  const formattedDate = formatWithFallback(dateOptions);
+  const formattedTime = formatWithFallback(timeOptions);
 
   return {
     dateTime: formattedDateTime,
