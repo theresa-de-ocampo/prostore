@@ -93,7 +93,7 @@ export const shippingAddressSchema = z.object({
 });
 
 export const paymentMethodSchema = z.object({
-  type: z.nativeEnum(PAYMENT_METHOD)
+  type: z.enum(PAYMENT_METHOD)
 });
 
 export const orderSchema = z.object({

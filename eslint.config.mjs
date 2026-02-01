@@ -30,10 +30,10 @@ const eslintConfig = defineConfig([
     ".next/**",
     "out/**",
     "build/**",
-    "next-env.d.ts",
+    "next-env.d.ts"
     // https://github.com/vercel/ai-elements/issues/291
     // https://github.com/vercel/ai-elements/issues/121
-    "components/ai-elements"
+    // "components/ai-elements"
   ])
 ]);
 

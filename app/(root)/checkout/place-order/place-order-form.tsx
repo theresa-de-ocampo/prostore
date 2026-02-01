@@ -2,6 +2,7 @@
 
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
+import { type SyntheticEvent } from "react";
 
 // * Components
 import { Button } from "@/components/ui/button";
@@ -14,7 +15,7 @@ export default function PlaceOrderForm() {
   const router = useRouter();
   const { pending } = useFormStatus();
 
-  async function handleSubmit(event: React.FormEvent) {
+  async function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const response = await createOrder();

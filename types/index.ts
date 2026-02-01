@@ -30,3 +30,13 @@ export type OrderRecord = z.infer<typeof orderRecord>;
 export type PaymentResult = z.infer<typeof paymentResultSchema>;
 export type KnowledgeDoc = z.infer<typeof knowledgeDocSchema>;
 export type KnowledgeDocRecord = z.infer<typeof knowledgeDocRecord>;
+
+export type ContextScope = {
+  scope: string;
+  content: string;
+};
+
+export type ContextBundle = {
+  base: string;
+  matched: Array<ContextScope>;
+};

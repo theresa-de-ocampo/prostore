@@ -1,12 +1,47 @@
+import { loadContext } from "@/lib/actions/knowledge.action";
+import { selectContextScopes } from "@/lib/ai";
 import { streamText, UIMessage, convertToModelMessages } from "ai";
 
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
+  let response: Response;
 
-  const result = streamText({
-    model: "openai/gpt-4.1",
-    messages: await convertToModelMessages(messages)
-  });
+  try {
+    const { messages }: { messages: UIMessage[] } = await req.json();
 
-  return result.toUIMessageStreamResponse();
+    const lastUserMessage = messages.findLast(
+      (message) => message.role === "user"
+    );
+
+    if (lastUserMessage?.parts[0]?.type === "text") {
+      const userInput = lastUserMessage.parts[0].text;
+      const contextScopes = selectContextScopes(userInput);
+      const knowledge = await loadContext(contextScopes);
+
+      let system = knowledge.base;
+
+      if (knowledge.matched.length > 0) {
+        system = `${system}\n\n${knowledge.matched.map((match) => match.content).join("\n\n")}`;
+      }
+
+      const result = streamText({
+        model: "openai/gpt-5-chat",
+        system,
+        messages: await convertToModelMessages(messages)
+      });
+
+      response = result.toUIMessageStreamResponse();
+    } else {
+      response = new Response("Last message must be a text user message.", {
+        status: 400,
+        headers: { "content-type": "text/plain; charset=utf-8" }
+      });
+    }
+  } catch {
+    response = new Response("Failed to process chat request.", {
+      status: 500,
+      headers: { "content-type": "text/plain; charset=utf-8" }
+    });
+  }
+
+  return response;
 }
