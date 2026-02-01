@@ -3,29 +3,45 @@ import { selectContextScopes } from "@/lib/ai";
 import { streamText, UIMessage, convertToModelMessages } from "ai";
 
 export async function POST(req: Request) {
-  const { messages }: { messages: UIMessage[] } = await req.json();
+  let response: Response;
 
-  const lastUserMessage = messages.findLast(
-    (message) => message.role === "user"
-  );
+  try {
+    const { messages }: { messages: UIMessage[] } = await req.json();
 
-  if (lastUserMessage?.parts[0].type === "text") {
-    const userInput = lastUserMessage.parts[0].text;
-    const contextScopes = selectContextScopes(userInput);
-    const knowledge = await loadContext(contextScopes);
+    const lastUserMessage = messages.findLast(
+      (message) => message.role === "user"
+    );
 
-    let system = knowledge.base;
+    if (lastUserMessage?.parts[0]?.type === "text") {
+      const userInput = lastUserMessage.parts[0].text;
+      const contextScopes = selectContextScopes(userInput);
+      const knowledge = await loadContext(contextScopes);
 
-    if (knowledge.matched.length > 0) {
-      system = `${system}\n\n${knowledge.matched.map((match) => match.content).join("\n\n")}`;
+      let system = knowledge.base;
+
+      if (knowledge.matched.length > 0) {
+        system = `${system}\n\n${knowledge.matched.map((match) => match.content).join("\n\n")}`;
+      }
+
+      const result = streamText({
+        model: "openai/gpt-5-chat",
+        system,
+        messages: await convertToModelMessages(messages)
+      });
+
+      response = result.toUIMessageStreamResponse();
+    } else {
+      response = Response.json(
+        { error: "Last message must be a text user message." },
+        { status: 400 }
+      );
     }
-
-    const result = streamText({
-      model: "openai/gpt-5-chat",
-      system,
-      messages: await convertToModelMessages(messages)
-    });
-
-    return result.toUIMessageStreamResponse();
+  } catch {
+    response = Response.json(
+      { error: "Failed to process chat request." },
+      { status: 500 }
+    );
   }
+
+  return response;
 }
