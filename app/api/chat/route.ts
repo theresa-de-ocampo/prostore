@@ -31,13 +31,15 @@ export async function POST(req: Request) {
 
       response = result.toUIMessageStreamResponse();
     } else {
-      response = Response.json("Last message must be a text user message.", {
-        status: 400
+      response = new Response("Last message must be a text user message.", {
+        status: 400,
+        headers: { "content-type": "text/plain; charset=utf-8" }
       });
     }
   } catch {
-    response = Response.json("Failed to process chat request.", {
-      status: 500
+    response = new Response("Failed to process chat request.", {
+      status: 500,
+      headers: { "content-type": "text/plain; charset=utf-8" }
     });
   }
 
