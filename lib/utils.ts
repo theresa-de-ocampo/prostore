@@ -103,17 +103,24 @@ export function formatDateTime(
   };
 
   const date = new Date(dateInput);
-  const withTimeZone = (options: Intl.DateTimeFormatOptions) =>
-    timeZone ? { ...options, timeZone } : options;
-  const formatWithFallback = (options: Intl.DateTimeFormatOptions) => {
+
+  function withTimeZone(options: Intl.DateTimeFormatOptions) {
+    return timeZone ? { ...options, timeZone } : options;
+  }
+
+  function formatWithFallback(options: Intl.DateTimeFormatOptions) {
+    let formatted: string;
+
     try {
-      return new Intl.DateTimeFormat(locale, withTimeZone(options)).format(
+      formatted = new Intl.DateTimeFormat(locale, withTimeZone(options)).format(
         date
       );
     } catch {
-      return new Intl.DateTimeFormat(locale, options).format(date);
+      formatted = new Intl.DateTimeFormat(locale, options).format(date);
     }
-  };
+
+    return formatted;
+  }
 
   const formattedDateTime = formatWithFallback(dateTimeOptions);
   const formattedDate = formatWithFallback(dateOptions);
