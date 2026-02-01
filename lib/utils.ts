@@ -107,7 +107,9 @@ export function formatDateTime(
     timeZone ? { ...options, timeZone } : options;
   const formatWithFallback = (options: Intl.DateTimeFormatOptions) => {
     try {
-      return new Intl.DateTimeFormat(locale, withTimeZone(options)).format(date);
+      return new Intl.DateTimeFormat(locale, withTimeZone(options)).format(
+        date
+      );
     } catch {
       return new Intl.DateTimeFormat(locale, options).format(date);
     }
@@ -122,4 +124,20 @@ export function formatDateTime(
     dateOnly: formattedDate,
     timeOnly: formattedTime
   };
+}
+
+export function getCookie(name: string) {
+  let value = null;
+
+  if (typeof document !== "undefined") {
+    const match = document.cookie
+      .split("; ")
+      .find((cookie) => cookie.startsWith(`${name}=`));
+
+    if (match) {
+      value = decodeURIComponent(match.split("=").slice(1).join("="));
+    }
+  }
+
+  return value;
 }

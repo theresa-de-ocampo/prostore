@@ -39,3 +39,5 @@ export const CONTEXT_SCOPE_MAP = [
     terms: ["deliver", "delivery", "fee", "how long", "ship", "shipping"]
   }
 ];
+
+export const TIMEZONE_COOKIE = "tz";
