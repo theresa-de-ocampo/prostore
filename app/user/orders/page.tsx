@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { formatId, formatDateTime } from "@/lib/utils";
-import { getRequestTimeZone } from "@/lib/server/timezone";
+import { getTimeZone } from "@/lib/server/timezone";
 
 // * Components
 import {
@@ -22,8 +22,8 @@ export const metadata = {
 export default async function OrdersPage(props: {
   searchParams: Promise<{ page: string }>;
 }) {
-  const timeZone = getRequestTimeZone();
   const { page } = await props.searchParams;
+  const timeZone = await getTimeZone();
 
   const orders = await getMyOrders({
     page: parseInt(page, 10) || 1

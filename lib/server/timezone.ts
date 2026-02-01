@@ -2,7 +2,7 @@ import { cookies, headers } from "next/headers";
 
 const TIMEZONE_COOKIE = "tz";
 
-export async function getRequestTimeZone() {
+export async function getTimeZone() {
   const cookieTimeZone = (await cookies()).get(TIMEZONE_COOKIE)?.value;
 
   if (cookieTimeZone) {

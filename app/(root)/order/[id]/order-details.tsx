@@ -15,12 +15,12 @@ import {
 
 // * Utils
 import { formatDateTime } from "@/lib/utils";
-import { getRequestTimeZone } from "@/lib/server/timezone";
+import { getTimeZone } from "@/lib/server/timezone";
 
 // * Types
 import { OrderRecord } from "@/types";
 
-export default function OrderDetails({ order }: { order: OrderRecord }) {
+export default async function OrderDetails({ order }: { order: OrderRecord }) {
   const {
     isDelivered,
     isPaid,
@@ -31,7 +31,7 @@ export default function OrderDetails({ order }: { order: OrderRecord }) {
     paidAt,
     deliveredAt
   } = order;
-  const timeZone = getRequestTimeZone();
+  const timeZone = await getTimeZone();
 
   return (
     <div className="grid md:grid-cols-3 gap-4 my-5">
