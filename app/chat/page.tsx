@@ -2,7 +2,7 @@
 
 import { isTextUIPart } from "ai";
 import { useChat } from "@ai-sdk/react";
-import { useState } from "react";
+import { useState, type SyntheticEvent } from "react";
 
 // * Components
 import {
@@ -28,7 +28,10 @@ export default function ChatPage() {
   const [text, setText] = useState<string>("");
   const { messages, sendMessage, status } = useChat();
 
-  function handleSubmit(_: PromptInputMessage, event: React.FormEvent) {
+  function handleSubmit(
+    _: PromptInputMessage,
+    event: SyntheticEvent<HTMLFormElement>
+  ) {
     event.preventDefault();
     sendMessage({ text });
     setText("");

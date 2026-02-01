@@ -51,12 +51,11 @@ import {
   type ClipboardEventHandler,
   type ComponentProps,
   createContext,
-  type FormEvent,
-  type FormEventHandler,
   type HTMLAttributes,
   type KeyboardEventHandler,
   type PropsWithChildren,
   type RefObject,
+  type SyntheticEvent,
   useCallback,
   useContext,
   useEffect,
@@ -345,7 +344,7 @@ export type PromptInputProps = Omit<
   }) => void;
   onSubmit: (
     message: PromptInputMessage,
-    event: FormEvent<HTMLFormElement>
+    event: SyntheticEvent<HTMLFormElement>
   ) => void | Promise<void>;
 };
 
@@ -688,7 +687,7 @@ export const PromptInput = ({
     [referencedSources, clearReferencedSources]
   );
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (event) => {
+  const handleSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const form = event.currentTarget;
