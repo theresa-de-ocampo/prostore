@@ -23,10 +23,16 @@ import {
   PromptInputSubmit,
   PromptInputMessage
 } from "@/components/ai-elements/prompt-input";
+import { toast } from "sonner";
+import { formatError } from "@/lib/utils";
 
 export default function ChatPage() {
   const [text, setText] = useState<string>("");
-  const { messages, sendMessage, status } = useChat();
+  const { messages, sendMessage, status, error } = useChat();
+
+  if (error) {
+    toast.error(formatError(error));
+  }
 
   function handleSubmit(
     _: PromptInputMessage,
