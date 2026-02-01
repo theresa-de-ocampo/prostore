@@ -5,7 +5,7 @@ import type { ContextBundle, ContextScope } from "@/types";
 import { prisma } from "@/db/prisma";
 
 export async function loadContext(scopes: string[]): Promise<ContextBundle> {
-  const types = Array.from(new Set(["generic", ...scopes]));
+  const types = Array.from(new Set(["generic", "product", ...scopes]));
 
   const docs = await prisma.knowledgeDoc.findMany({
     where: { type: { in: types } },

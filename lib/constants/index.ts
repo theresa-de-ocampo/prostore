@@ -37,19 +37,5 @@ export const CONTEXT_SCOPE_MAP = [
   {
     type: "shipping_delivery",
     terms: ["deliver", "delivery", "fee", "how long", "ship", "shipping"]
-  },
-  {
-    type: "product",
-    terms: [
-      "best-seller",
-      "casual",
-      "color",
-      "cotton",
-      "linen",
-      "materials",
-      "product",
-      "size",
-      "sleeve"
-    ]
   }
 ];
