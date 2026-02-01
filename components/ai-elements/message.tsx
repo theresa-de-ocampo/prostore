@@ -16,7 +16,14 @@ import { mermaid } from "@streamdown/mermaid";
 import type { UIMessage } from "ai";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import type { ComponentProps, HTMLAttributes, ReactElement } from "react";
-import { createContext, memo, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  memo,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from "react";
 import { Streamdown } from "streamdown";
 
 export type MessageProps = HTMLAttributes<HTMLDivElement> & {
@@ -184,7 +191,10 @@ export const MessageBranchContent = ({
   ...props
 }: MessageBranchContentProps) => {
   const { currentBranch, setBranches, branches } = useMessageBranch();
-  const childrenArray = Array.isArray(children) ? children : [children];
+  const childrenArray = useMemo(
+    () => (Array.isArray(children) ? children : [children]),
+    [children]
+  );
 
   // Use useEffect to update branches when they change
   useEffect(() => {
@@ -213,10 +223,11 @@ export type MessageBranchSelectorProps = HTMLAttributes<HTMLDivElement> & {
 
 export const MessageBranchSelector = ({
   className,
-  from,
+  from: _from,
   ...props
 }: MessageBranchSelectorProps) => {
   const { totalBranches } = useMessageBranch();
+  void _from;
 
   // Don't render if there's only one branch
   if (totalBranches <= 1) {
@@ -225,7 +236,10 @@ export const MessageBranchSelector = ({
 
   return (
     <ButtonGroup
-      className="[&>*:not(:first-child)]:rounded-l-md [&>*:not(:last-child)]:rounded-r-md"
+      className={cn(
+        "[&>*:not(:first-child)]:rounded-l-md [&>*:not(:last-child)]:rounded-r-md",
+        className
+      )}
       orientation="horizontal"
       {...props}
     />
@@ -311,8 +325,8 @@ export const MessageResponse = memo(
       plugins={{ code, mermaid, math, cjk }}
       components={{
         // Prevent <div> (popover/menu) from ever being inside <p>
-        p: ({ children, ...pProps }) => (
-          <div {...pProps} className={cn("my-2", (pProps as any).className)}>
+        p: ({ children, className: pClassName, ...pProps }) => (
+          <div {...pProps} className={cn("my-2", pClassName)}>
             {children}
           </div>
         )

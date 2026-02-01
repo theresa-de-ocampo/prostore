@@ -192,7 +192,10 @@ export function PromptInputProvider({
 
   // Keep a ref to attachments for cleanup on unmount (avoids stale closure)
   const attachmentsRef = useRef(attachmentFiles);
-  attachmentsRef.current = attachmentFiles;
+
+  useEffect(() => {
+    attachmentsRef.current = attachmentFiles;
+  }, [attachmentFiles]);
 
   // Cleanup blob URLs on unmount to prevent memory leaks
   useEffect(
@@ -380,7 +383,10 @@ export const PromptInput = ({
 
   // Keep a ref to files for cleanup on unmount (avoids stale closure)
   const filesRef = useRef(files);
-  filesRef.current = files;
+
+  useEffect(() => {
+    filesRef.current = files;
+  }, [files]);
 
   const openFileDialogLocal = useCallback(() => {
     inputRef.current?.click();
@@ -619,8 +625,8 @@ export const PromptInput = ({
     };
   }, [add, globalDrop]);
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    return () => {
       if (!usingProvider) {
         for (const f of filesRef.current) {
           if (f.url) {
@@ -628,10 +634,8 @@ export const PromptInput = ({
           }
         }
       }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- cleanup only on unmount; filesRef always current
-    [usingProvider]
-  );
+    };
+  }, [usingProvider]);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     if (event.currentTarget.files) {
@@ -706,16 +710,18 @@ export const PromptInput = ({
 
     // Convert blob URLs to data URLs asynchronously
     Promise.all(
-      files.map(async ({ id, ...item }) => {
-        if (item.url?.startsWith("blob:")) {
-          const dataUrl = await convertBlobUrlToDataUrl(item.url);
+      files.map(async (item) => {
+        const { id, ...rest } = item;
+        void id;
+        if (rest.url?.startsWith("blob:")) {
+          const dataUrl = await convertBlobUrlToDataUrl(rest.url);
           // If conversion failed, keep the original blob URL
           return {
-            ...item,
-            url: dataUrl ?? item.url,
+            ...rest,
+            url: dataUrl ?? rest.url,
           };
         }
-        return item;
+        return rest;
       })
     )
       .then((convertedFiles: FileUIPart[]) => {
