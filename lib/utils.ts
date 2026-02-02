@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import queryString from "query-string";
 
 export class RedirectableError extends Error {
   redirectTo: string;
@@ -147,4 +148,26 @@ export function getCookie(name: string) {
   }
 
   return value;
+}
+
+export function addQueryParams({
+  params,
+  key,
+  value
+}: {
+  params: string;
+  key: string;
+  value: string | null;
+}) {
+  const query = queryString.parse(params);
+
+  query[key] = value;
+
+  return queryString.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query
+    },
+    { skipNull: true }
+  );
 }

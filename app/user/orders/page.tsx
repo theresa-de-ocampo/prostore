@@ -11,6 +11,7 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
+import Pagination from "@/components/shared/pagination";
 
 // * Actions
 import { getMyOrders } from "@/lib/actions/order.actions";
@@ -30,7 +31,7 @@ export default async function OrdersPage(props: {
   });
 
   return (
-    <section>
+    <section className="flex flex-col gap-4">
       <h2>Orders</h2>
       <Table>
         <TableHeader>
@@ -66,6 +67,7 @@ export default async function OrdersPage(props: {
           ))}
         </TableBody>
       </Table>
+      <Pagination totalPages={orders.totalPages} />
     </section>
   );
 }
