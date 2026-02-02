@@ -75,7 +75,11 @@ export function formatId(id: string) {
   return id.substring(id.length - 6);
 }
 
-export function formatDateTime(dateString: Date) {
+export function formatDateTime(
+  dateInput: Date | string,
+  timeZone?: string,
+  locale = "en-US"
+) {
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
     month: "short",
     year: "numeric",
@@ -98,24 +102,49 @@ export function formatDateTime(dateString: Date) {
     hour12: true
   };
 
-  const formattedDateTime: string = new Date(dateString).toLocaleString(
-    "en-US",
-    dateTimeOptions
-  );
+  const date = new Date(dateInput);
 
-  const formattedDate: string = new Date(dateString).toLocaleString(
-    "en-US",
-    dateOptions
-  );
+  function withTimeZone(options: Intl.DateTimeFormatOptions) {
+    return timeZone ? { ...options, timeZone } : options;
+  }
 
-  const formattedTime: string = new Date(dateString).toLocaleString(
-    "en-US",
-    timeOptions
-  );
+  function formatWithFallback(options: Intl.DateTimeFormatOptions) {
+    let formatted: string;
+
+    try {
+      formatted = new Intl.DateTimeFormat(locale, withTimeZone(options)).format(
+        date
+      );
+    } catch {
+      formatted = new Intl.DateTimeFormat(locale, options).format(date);
+    }
+
+    return formatted;
+  }
+
+  const formattedDateTime = formatWithFallback(dateTimeOptions);
+  const formattedDate = formatWithFallback(dateOptions);
+  const formattedTime = formatWithFallback(timeOptions);
 
   return {
     dateTime: formattedDateTime,
     dateOnly: formattedDate,
     timeOnly: formattedTime
   };
+}
+
+export function getCookie(name: string) {
+  let value = null;
+
+  if (typeof document !== "undefined") {
+    const match = document.cookie
+      .split("; ")
+      .find((cookie) => cookie.startsWith(`${name}=`));
+
+    if (match) {
+      value = decodeURIComponent(match.split("=").slice(1).join("="));
+    }
+  }
+
+  return value;
 }

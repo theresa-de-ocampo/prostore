@@ -24,6 +24,8 @@
 - TypeScript + React, 2-space indentation, double quotes, and semicolons (match existing files).
 - Do not use deprecated APIs (symbols marked with `@deprecated` in types).
 - Components use `PascalCase`; variables and functions use `camelCase`.
+- Use a single return branch in each function.
+- Use arrow functions only for anonymous functions; named functions must use `function` declarations.
 - Route folders are kebab-case (e.g., `sign-in`, `shipping-address`).
 - Prefer Tailwind utility classes; keep global CSS in `assets/styles/globals.css`.
 - Don't use extra `<div>` just for styling purposes.

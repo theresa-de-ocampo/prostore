@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { formatId, formatDateTime } from "@/lib/utils";
+import { getTimeZone } from "@/lib/server/timezone";
 
 // * Components
 import {
@@ -22,6 +23,7 @@ export default async function OrdersPage(props: {
   searchParams: Promise<{ page: string }>;
 }) {
   const { page } = await props.searchParams;
+  const timeZone = await getTimeZone();
 
   const orders = await getMyOrders({
     page: parseInt(page, 10) || 1
@@ -45,11 +47,13 @@ export default async function OrdersPage(props: {
           {orders.data.map((order) => (
             <TableRow key={order.id}>
               <TableCell>{formatId(order.id)}</TableCell>
-              <TableCell>{formatDateTime(order.createdAt).dateTime}</TableCell>
+              <TableCell>
+                {formatDateTime(order.createdAt, timeZone).dateTime}
+              </TableCell>
               <TableCell>${order.totalPrice}</TableCell>
               <TableCell>
                 {order.paidAt
-                  ? formatDateTime(order.paidAt).dateTime
+                  ? formatDateTime(order.paidAt, timeZone).dateTime
                   : "Not Paid"}
               </TableCell>
               <TableCell className="text-center">
