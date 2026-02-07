@@ -1,6 +1,8 @@
 "use client";
 
 import { useSession } from "next-auth/react";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import type { User } from "@/types";
 import {
   FieldGroup,
@@ -17,6 +19,7 @@ import { updateUserName } from "@/lib/actions/user.actions";
 import { toast } from "sonner";
 
 export default function PersonalInfoForm() {
+  const router = useRouter();
   const { data, status, update } = useSession();
 
   const form = useForm<User>({
@@ -28,11 +31,22 @@ export default function PersonalInfoForm() {
     mode: "all"
   });
 
-  async function onSubmit(data: User) {
-    const response = await updateUserName(data.name);
+  useEffect(() => {
+    if (status === "authenticated") {
+      form.reset({
+        email: data?.user?.email || "",
+        name: data?.user?.name || ""
+      });
+    }
+  }, [data?.user?.email, data?.user?.name, form, status]);
+
+  async function onSubmit(values: User) {
+    const response = await updateUserName(values.name);
 
     if (response.success) {
-      await update({ user: { ...data, name: data.name } });
+      await update({ user: { ...values, name: values.name } });
+      form.reset(values);
+      router.refresh();
       toast.success(response.message);
     } else {
       toast.error(response.message);
