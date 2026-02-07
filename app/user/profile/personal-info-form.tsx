@@ -41,47 +41,41 @@ export default function PersonalInfoForm() {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} method="post">
-      {status === "authenticated" && (
-        <FieldGroup>
-          <Controller
-            name="email"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-                <Input
-                  {...field}
-                  id="email"
-                  aria-invalid={fieldState.invalid}
-                  disabled
-                />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
-          <Controller
-            name="name"
-            control={form.control}
-            render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="name">Name</FieldLabel>
-                <Input {...field} id="name" aria-invalid={fieldState.invalid} />
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            )}
-          />
-          <Button
-            type="submit"
-            disabled={form.formState.isSubmitting || !form.formState.isDirty}
-          >
-            Save
-          </Button>
-        </FieldGroup>
-      )}
+      <FieldGroup>
+        <Controller
+          name="email"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="email">Email</FieldLabel>
+              <Input
+                {...field}
+                id="email"
+                aria-invalid={fieldState.invalid}
+                disabled
+              />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        <Controller
+          name="name"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="name">Name</FieldLabel>
+              <Input {...field} id="name" aria-invalid={fieldState.invalid} />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        <Button
+          type="submit"
+          disabled={form.formState.isSubmitting || !form.formState.isDirty}
+        >
+          Save
+        </Button>
+      </FieldGroup>
     </form>
   );
 }
