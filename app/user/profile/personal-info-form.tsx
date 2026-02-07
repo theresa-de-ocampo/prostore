@@ -1,20 +1,28 @@
 "use client";
 
+import { toast } from "sonner";
 import { useSession } from "next-auth/react";
-import type { User } from "@/types";
+
+// * RHF & Validations
+import { useForm, Controller } from "react-hook-form";
+import { userSchema } from "@/lib/validators";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+// * Components
 import {
   FieldGroup,
   Field,
   FieldLabel,
   FieldError
 } from "@/components/ui/field";
-import { useForm, Controller } from "react-hook-form";
-import { userSchema } from "@/lib/validators";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
+// * Actions
 import { updateUserName } from "@/lib/actions/user.actions";
-import { toast } from "sonner";
+
+// * Types
+import type { User } from "@/types";
 
 export default function PersonalInfoForm() {
   const { data: session, update } = useSession();

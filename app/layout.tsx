@@ -1,12 +1,20 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "@/assets/styles/globals.css";
-import { APP_NAME, SERVER_URL } from "@/lib/constants";
 import { ThemeProvider } from "next-themes";
-import { Toaster } from "@/components/ui/sonner";
+
+// * Components
 import TimeZoneCookie from "@/components/timezone-cookie";
+import { Toaster } from "@/components/ui/sonner";
+
+// * Auth
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
+
+// * Lib
+import { APP_NAME, SERVER_URL } from "@/lib/constants";
+
+// * Styles
+import "@/assets/styles/globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
