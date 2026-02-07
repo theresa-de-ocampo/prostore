@@ -80,6 +80,11 @@ export const cartSchema = cartCookieSchema.extend({
   userId: z.string().nullable()
 });
 
+export const userSchema = z.object({
+  name: z.string(),
+  email: z.email()
+});
+
 export const cartRecord = dbRecordSchema.extend(cartSchema.shape);
 
 export const shippingAddressSchema = z.object({
@@ -135,10 +140,7 @@ export const orderRecord = dbRecordSchema
     isDelivered: z.boolean().default(false),
     deliveredAt: z.date().nullable(),
     orderItems: z.array(orderItemSchema),
-    user: z.object({
-      name: z.string(),
-      email: z.email()
-    })
+    user: userSchema
   })
   .superRefine((data, ctx) => {
     if (

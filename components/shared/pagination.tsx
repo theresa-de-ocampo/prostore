@@ -21,6 +21,10 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
     router.push(destination);
   }
 
+  if (totalPages <= 1) {
+    return null;
+  }
+
   return (
     <footer className="flex gap-2">
       <Button

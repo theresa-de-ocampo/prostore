@@ -198,3 +198,32 @@ export async function updateUserPaymentMethod(data: PaymentMethod) {
 
   return response;
 }
+
+export async function updateUserName(name: string) {
+  let response;
+
+  try {
+    const session = await auth();
+
+    // const user = await prisma.user.findFirstOrThrow({
+    //   where: {
+    //     id: session?.user?.id
+    //   }
+    // });
+
+    await prisma.user.update({
+      where: {
+        id: session?.user?.id
+      },
+      data: {
+        name
+      }
+    });
+
+    response = { success: true, message: "Name updated successfully." };
+  } catch (error) {
+    response = { success: false, message: formatError(error) };
+  }
+
+  return response;
+}
