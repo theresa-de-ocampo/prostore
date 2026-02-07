@@ -81,7 +81,7 @@ export const cartSchema = cartCookieSchema.extend({
 });
 
 export const userSchema = z.object({
-  name: z.string(),
+  name: z.string().trim().nonempty("Name is required."),
   email: z.email()
 });
 

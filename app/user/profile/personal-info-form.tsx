@@ -13,6 +13,8 @@ import { userSchema } from "@/lib/validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { updateUserName } from "@/lib/actions/user.actions";
+import { toast } from "sonner";
 
 export default function PersonalInfoForm() {
   const { data, status, update } = useSession();
@@ -26,8 +28,19 @@ export default function PersonalInfoForm() {
     mode: "all"
   });
 
+  async function onSubmit(data: User) {
+    const response = await updateUserName(data.name);
+
+    if (response.success) {
+      await update({ user: { ...data, name: data.name } });
+      toast.success(response.message);
+    } else {
+      toast.error(response.message);
+    }
+  }
+
   return (
-    <form>
+    <form onSubmit={form.handleSubmit(onSubmit)} method="post">
       {status === "authenticated" && (
         <FieldGroup>
           <Controller
