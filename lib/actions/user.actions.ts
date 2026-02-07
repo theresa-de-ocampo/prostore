@@ -1,6 +1,6 @@
 "use server";
 
-import { auth, signIn, signOut } from "@/auth";
+import { auth, signIn } from "@/auth";
 import {
   shippingAddressSchema,
   signInSchema,
@@ -35,10 +35,6 @@ export async function signInWithCredentials(_: unknown, formData: FormData) {
   }
 
   return response;
-}
-
-export async function logOut() {
-  await signOut();
 }
 
 export async function signUp(_: unknown, formData: FormData) {

@@ -1,8 +1,6 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import type { User } from "@/types";
 import {
   FieldGroup,
@@ -19,34 +17,23 @@ import { updateUserName } from "@/lib/actions/user.actions";
 import { toast } from "sonner";
 
 export default function PersonalInfoForm() {
-  const router = useRouter();
-  const { data, status, update } = useSession();
+  const { data: session, update } = useSession();
 
   const form = useForm<User>({
     resolver: zodResolver(userSchema),
     defaultValues: {
-      email: data?.user?.email || "",
-      name: data?.user?.name || ""
+      email: session?.user?.email || "",
+      name: session?.user?.name || ""
     },
     mode: "all"
   });
 
-  useEffect(() => {
-    if (status === "authenticated") {
-      form.reset({
-        email: data?.user?.email || "",
-        name: data?.user?.name || ""
-      });
-    }
-  }, [data?.user?.email, data?.user?.name, form, status]);
-
-  async function onSubmit(values: User) {
-    const response = await updateUserName(values.name);
+  async function onSubmit(data: User) {
+    const response = await updateUserName(data.name);
 
     if (response.success) {
-      await update({ user: { ...values, name: values.name } });
-      form.reset(values);
-      router.refresh();
+      await update({ user: { ...data, name: data.name } });
+      form.reset(data);
       toast.success(response.message);
     } else {
       toast.error(response.message);

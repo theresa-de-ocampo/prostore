@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
 
 // * Components
 import { Button } from "@/components/ui/button";
@@ -11,14 +14,8 @@ import {
   DropdownMenuItem
 } from "@/components/ui/dropdown-menu";
 
-// * Auth
-import { auth } from "@/auth";
-
-// * Actions
-import { logOut } from "@/lib/actions/user.actions";
-
-export default async function UserButton() {
-  const session = await auth();
+export default function UserButton() {
+  const { data: session } = useSession();
 
   if (!session?.user?.name || !session?.user?.email) {
     return (
@@ -55,11 +52,13 @@ export default async function UserButton() {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild className="py-0 px-2">
-          <form action={logOut}>
-            <Button variant="ghost" className="w-full h-8 justify-start p-0">
-              Sign Out
-            </Button>
-          </form>
+          <Button
+            variant="ghost"
+            className="w-full h-8 justify-start p-0"
+            onClick={() => signOut()}
+          >
+            Sign Out
+          </Button>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

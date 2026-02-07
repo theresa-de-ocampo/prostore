@@ -5,6 +5,8 @@ import { APP_NAME, SERVER_URL } from "@/lib/constants";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import TimeZoneCookie from "@/components/timezone-cookie";
+import { SessionProvider } from "next-auth/react";
+import { auth } from "@/auth";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,11 +22,13 @@ export const metadata: Metadata = {
   metadataBase: new URL(SERVER_URL)
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} antialiased`}>
@@ -35,7 +39,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <TimeZoneCookie />
-          {children}
+          <SessionProvider session={session}>{children}</SessionProvider>
           <Toaster />
         </ThemeProvider>
       </body>
