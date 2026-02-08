@@ -112,7 +112,7 @@ export const config = {
     authorized({ request, auth }) {
       let response: NextResponse<unknown> | boolean = true;
 
-      const protectedPaths = ["/checkout", "/admin"];
+      const protectedPaths = ["/checkout", "/admin", "/user"];
       const { pathname } = request.nextUrl;
 
       if (!auth && protectedPaths.some((p) => pathname.startsWith(p))) {
