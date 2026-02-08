@@ -12,6 +12,7 @@ import {
   TableRow
 } from "@/components/ui/table";
 import Pagination from "@/components/shared/pagination";
+import EmptyOrderList from "./empty-order-list";
 
 // * Actions
 import { getMyOrders } from "@/lib/actions/order.actions";
@@ -29,6 +30,10 @@ export default async function OrdersPage(props: {
   const orders = await getMyOrders({
     page: parseInt(page, 10) || 1
   });
+
+  if (orders.data.length === 0) {
+    return <EmptyOrderList />;
+  }
 
   return (
     <section className="flex flex-col gap-4">
