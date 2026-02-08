@@ -180,12 +180,6 @@ export async function updateUserName(name: string) {
   try {
     const session = await auth();
 
-    // const user = await prisma.user.findFirstOrThrow({
-    //   where: {
-    //     id: session?.user?.id
-    //   }
-    // });
-
     await prisma.user.update({
       where: {
         id: session?.user?.id
