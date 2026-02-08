@@ -2,6 +2,7 @@
 
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 // * RHF & Validations
 import { useForm, Controller } from "react-hook-form";
@@ -38,6 +39,7 @@ import type { User } from "@/types";
  */
 export default function PersonalInfoForm() {
   const { data: session, update } = useSession();
+  const router = useRouter();
 
   const form = useForm<User>({
     resolver: zodResolver(userSchema),
@@ -55,6 +57,7 @@ export default function PersonalInfoForm() {
       await update({ user: { ...data, name: data.name } });
       form.reset(data);
       toast.success(response.message);
+      router.refresh();
     } else {
       toast.error(response.message);
     }
