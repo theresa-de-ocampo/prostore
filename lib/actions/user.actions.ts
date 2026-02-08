@@ -108,27 +108,6 @@ export async function signUpV2(data: {
   return response;
 }
 
-export async function editUser(id: string, data: { name: string }) {
-  let response;
-
-  try {
-    await prisma.user.update({
-      where: { id },
-      data
-    });
-
-    response = { success: true, message: "User updated successfully." };
-  } catch (error) {
-    if (isRedirectError(error)) {
-      throw error;
-    }
-
-    response = { success: false, message: "User was not updated." };
-  }
-
-  return response;
-}
-
 export async function getUserById(userId: string) {
   return await prisma.user.findFirstOrThrow({
     where: { id: userId }

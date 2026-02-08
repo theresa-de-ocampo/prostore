@@ -24,6 +24,18 @@ import { updateUserName } from "@/lib/actions/user.actions";
 // * Types
 import type { User } from "@/types";
 
+/**
+ * This component demonstrates how to update the user session in NextAuth.js.
+ * It allows the user to change their name, which triggers a session update.
+ * The session update is handled in the auth.ts configuration, specifically in the
+ * JWT callback where the 'update' trigger is processed to refresh the token.
+ *
+ * Key features:
+ * - Uses NextAuth's useSession hook to access and update session data.
+ * - Calls the updateUserName server action to persist the name change in the database.
+ * - Invokes update() to refresh the client-side session, which communicates with
+ *   the auth.ts callbacks to update the JWT and session.
+ */
 export default function PersonalInfoForm() {
   const { data: session, update } = useSession();
 
