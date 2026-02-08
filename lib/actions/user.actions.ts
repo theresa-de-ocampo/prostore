@@ -112,27 +112,6 @@ export async function signUpV2(data: {
   return response;
 }
 
-export async function editUser(id: string, data: { name: string }) {
-  let response;
-
-  try {
-    await prisma.user.update({
-      where: { id },
-      data
-    });
-
-    response = { success: true, message: "User updated successfully." };
-  } catch (error) {
-    if (isRedirectError(error)) {
-      throw error;
-    }
-
-    response = { success: false, message: "User was not updated." };
-  }
-
-  return response;
-}
-
 export async function getUserById(userId: string) {
   return await prisma.user.findFirstOrThrow({
     where: { id: userId }
@@ -192,6 +171,29 @@ export async function updateUserPaymentMethod(data: PaymentMethod) {
       success: true,
       message: "User updated successfully."
     };
+  } catch (error) {
+    response = { success: false, message: formatError(error) };
+  }
+
+  return response;
+}
+
+export async function updateUserName(name: string) {
+  let response;
+
+  try {
+    const session = await auth();
+
+    await prisma.user.update({
+      where: {
+        id: session?.user?.id
+      },
+      data: {
+        name
+      }
+    });
+
+    response = { success: true, message: "Name updated successfully." };
   } catch (error) {
     response = { success: false, message: formatError(error) };
   }

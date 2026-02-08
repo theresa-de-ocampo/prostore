@@ -54,7 +54,6 @@ export function formatError(error: any) {
     error.name === "PrismaClientKnownRequestError" &&
     error.code === "P2002"
   ) {
-    console.dir(error?.meta?.driverAdapterError, { depth: null });
     const field = error.meta.driverAdapterError.cause.constraint.fields[0];
 
     if (typeof field === "string") {
@@ -62,6 +61,12 @@ export function formatError(error: any) {
         1
       )} already exists.`;
     }
+  } else if (
+    error.name === "PrismaClientKnownRequestError" &&
+    error.code === "P2025"
+  ) {
+    const { modelName, operation } = error.meta;
+    message = `No ${modelName} was found for ${operation}.`;
   } else {
     message =
       typeof error.message === "string"

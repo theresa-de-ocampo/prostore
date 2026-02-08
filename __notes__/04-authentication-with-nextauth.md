@@ -131,7 +131,7 @@ update();
 - It is not the session sent to the client.
 - You usually use to merge new/updated fields into the JWT.
 
-Note that at this point — when you call `update()` — the `user` argument of the `jwt` callback will be undefined since it is only the response returned from the `authorize` callback.
+Note that at this point — when you call `update()` — the `user` argument of the `jwt` callback will be `undefined` since it is only the response returned from the `authorize` callback.
 
 ### `session` callback — `session` param
 

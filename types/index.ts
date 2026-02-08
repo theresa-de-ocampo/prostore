@@ -13,7 +13,8 @@ import {
   orderRecord,
   paymentResultSchema,
   knowledgeDocSchema,
-  knowledgeDocRecord
+  knowledgeDocRecord,
+  userSchema
 } from "@/lib/validators";
 
 export type Product = z.infer<typeof productSchema>;
@@ -30,6 +31,7 @@ export type OrderRecord = z.infer<typeof orderRecord>;
 export type PaymentResult = z.infer<typeof paymentResultSchema>;
 export type KnowledgeDoc = z.infer<typeof knowledgeDocSchema>;
 export type KnowledgeDocRecord = z.infer<typeof knowledgeDocRecord>;
+export type User = z.infer<typeof userSchema>;
 
 export type ContextScope = {
   scope: string;

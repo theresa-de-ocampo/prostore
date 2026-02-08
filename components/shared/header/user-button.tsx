@@ -13,8 +13,6 @@ import {
 
 // * Auth
 import { auth } from "@/auth";
-
-// * Actions
 import { logOut } from "@/lib/actions/user.actions";
 
 export default async function UserButton() {
