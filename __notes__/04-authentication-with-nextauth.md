@@ -101,7 +101,7 @@ At `user-button.tsx`, if you try to directly use the `signOut` function from `Ne
 
 ## 4.5. JWT Callback
 
-When you're using the Credentials provider, you control the user object returned during the `authorize` callback, but `profile` will be `undefined`.
+When you're using the Credentials provider, you control the `user` object returned during the `authorize` callback, but `profile` will be `undefined`.
 
 When using any OAuth provider, the provider returns a `profile` object usually containing `name`, `email`, `image`, and `roles`. Different providers may name their fields differently or provide varying levels of information.
 
@@ -141,3 +141,27 @@ Note that at this point — when you call `update()` — the `user` argument of 
 ## 4.7. New Users
 
 New users can be detected using the `jwt` callback. In v4, there's an `isNewUser` param, but this has now been replaced with the `signUp` trigger.
+
+## 4.8 [Module Augmentation](https://next-auth.js.org/getting-started/typescript)
+
+### [`Types of 'createUser' are incompatible`](https://github.com/nextauthjs/next-auth/issues/9493)
+
+Use type assertion for the Adapter.
+
+```typescript
+adapter: PrismaAdapter(prisma) as Adapter;
+```
+
+### Why was an explicit type used for the session callback?
+
+Without it, `token.role` is unknown. This is because `next-auth` is using its own `@auth/core` type instance which falls back to `Record<string, unknown>`.
+
+Extending JWT in in `@auth/core/jwt` by adding the following to [next-auth.d.ts](../types/next-auth.d.ts) does not seem to work.
+
+```typescript
+declare module "@auth/core/jwt" {
+  interface JWT {
+    role: string;
+  }
+}
+```

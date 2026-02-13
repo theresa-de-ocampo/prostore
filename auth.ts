@@ -1,13 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { type NextAuthConfig } from "next-auth";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
+// * Prisma
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/db/prisma";
 
+// * Utils
 import { compareSync } from "bcrypt-ts-edge";
+
+// * Types
+import type { Adapter } from "next-auth/adapters";
+import type { JWT } from "next-auth/jwt";
+import type { Session } from "next-auth";
 
 export const config = {
   pages: {
@@ -18,7 +24,7 @@ export const config = {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60 // 30 days
   },
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prisma) as Adapter,
   providers: [
     CredentialsProvider({
       credentials: {
@@ -37,6 +43,8 @@ export const config = {
             user &&
             compareSync(credentials.password as string, user.password)
           ) {
+            // node_modules/@auth/core/src/lib/actions/callback/index.ts at line 354
+            // copies user.id into the default token
             response = {
               id: user.id,
               name: user.name,
@@ -51,11 +59,11 @@ export const config = {
     })
   ],
   callbacks: {
-    async jwt({ token, user, trigger, session }: any) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.role = user.role;
 
-        if (!user.name) {
+        if (!user.name && typeof user.email === "string") {
           const pseudoName = user.email.split("@")[0];
           token.name = `${pseudoName.charAt(0).toUpperCase()}${pseudoName.slice(
             1
@@ -102,7 +110,7 @@ export const config = {
 
       return token;
     },
-    async session({ session, token }: any) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       session.user.id = token.sub;
       session.user.role = token.role;
       session.user.name = token.name;
