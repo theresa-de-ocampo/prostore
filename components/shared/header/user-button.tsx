@@ -8,12 +8,19 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuLabel,
-  DropdownMenuItem
+  DropdownMenuItem,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuPortal,
+  DropdownMenuSubContent
 } from "@/components/ui/dropdown-menu";
 
 // * Auth
 import { auth } from "@/auth";
 import { logOut } from "@/lib/actions/user.actions";
+
+// * Constants
+import { ADMIN_LINKS } from "@/lib/constants";
 
 export default async function UserButton() {
   const session = await auth();
@@ -52,6 +59,22 @@ export default async function UserButton() {
             Order History
           </Link>
         </DropdownMenuItem>
+        {session.user.role === "admin" && (
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>Admin</DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent>
+                {ADMIN_LINKS.map((link) => (
+                  <DropdownMenuItem key={link.href}>
+                    <Link href={link.href} className="w-full">
+                      {link.title}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
+        )}
         <DropdownMenuItem asChild className="py-0 px-2">
           <form action={logOut}>
             <Button variant="ghost" className="w-full h-8 justify-start p-0">
