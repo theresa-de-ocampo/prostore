@@ -13,11 +13,7 @@ export default function Footer({ className }: { className?: string }) {
       )}
     >
       <p>
-        {currentYear} {APP_NAME}
-        <span className="hidden sm:inline">.</span>
-      </p>
-      <p>
-        All Rights Reserved<span className="hidden sm:inline">.</span>
+        {currentYear} {APP_NAME}. All Rights Reserved.
       </p>
       <Link
         className="relative after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-0 after:bg-current after:transition-all after:duration-300 after:content-[''] hover:after:w-full w-max"
