@@ -1,3 +1,7 @@
 export default function OverviewPage() {
-  return <div>OverviewPage</div>;
+  return (
+    <section>
+      <h2>Dashboard</h2>
+    </section>
+  );
 }
