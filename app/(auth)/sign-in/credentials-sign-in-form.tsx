@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-// import { useSearchParams } from "next/navigation";
 
 // * Components
 import { Label } from "@/components/ui/label";
@@ -20,14 +19,8 @@ export default function CredentialsSignInForm() {
     message: ""
   });
 
-  // const searchParams = useSearchParams();
-  // const callbackUrl = searchParams.get("callbackUrl") || "/";
-
-  const { pending } = useFormStatus();
-
   return (
     <form className="flex flex-col gap-4" action={action}>
-      {/* <input type="hidden" name="callbackUrl" value={callbackUrl} /> */}
       <div>
         <Label htmlFor="email">Email</Label>
         <Input
@@ -49,10 +42,7 @@ export default function CredentialsSignInForm() {
         />
       </div>
       <div>
-        <Button className="w-full" disabled={pending}>
-          {pending && <Spinner />}
-          Sign In
-        </Button>
+        <SignInButton />
         {!data.success && (
           <p className="text-destructive mt-2">{data.message}</p>
         )}
@@ -64,5 +54,16 @@ export default function CredentialsSignInForm() {
         </Link>
       </p>
     </form>
+  );
+}
+
+function SignInButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button className="w-full" disabled={pending}>
+      {pending && <Spinner />}
+      Sign In
+    </Button>
   );
 }

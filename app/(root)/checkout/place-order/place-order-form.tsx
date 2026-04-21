@@ -13,7 +13,6 @@ import { createOrder } from "@/lib/actions/order.actions";
 
 export default function PlaceOrderForm() {
   const router = useRouter();
-  const { pending } = useFormStatus();
 
   async function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -27,9 +26,17 @@ export default function PlaceOrderForm() {
 
   return (
     <form onSubmit={handleSubmit} className="w-full">
-      <Button type="submit" disabled={pending} className="w-full">
-        {pending && <Spinner />} Place Order
-      </Button>
+      <PlaceOrderButton />
     </form>
+  );
+}
+
+function PlaceOrderButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type="submit" disabled={pending} className="w-full">
+      {pending && <Spinner />} Place Order
+    </Button>
   );
 }

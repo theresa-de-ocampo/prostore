@@ -19,8 +19,6 @@ export default function SignUpForm() {
     message: ""
   });
 
-  const { pending } = useFormStatus();
-
   return (
     <form className="flex flex-col gap-4" action={action}>
       <div>
@@ -58,10 +56,7 @@ export default function SignUpForm() {
         />
       </div>
       <div>
-        <Button className="w-full" disabled={pending}>
-          {pending && <Spinner />}
-          Sign Up
-        </Button>
+        <SignUpButton />
         {!data.success && (
           <p className="text-destructive mt-2">{data.message}</p>
         )}
@@ -73,5 +68,16 @@ export default function SignUpForm() {
         </Link>
       </p>
     </form>
+  );
+}
+
+function SignUpButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button className="w-full" disabled={pending}>
+      {pending && <Spinner />}
+      Sign Up
+    </Button>
   );
 }
