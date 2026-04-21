@@ -148,6 +148,7 @@ export function getCookie(name: string) {
       .find((cookie) => cookie.startsWith(`${name}=`));
 
     if (match) {
+      // Extra join because cookie values can contain =
       value = decodeURIComponent(match.split("=").slice(1).join("="));
     }
   }

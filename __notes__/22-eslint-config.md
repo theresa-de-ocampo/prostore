@@ -39,7 +39,7 @@ Enable TypeScript-aware ESLint + the `no-deprecated` rule.
    ]);
    ```
 
-   `parser` and `parserOptions` enables **typed linting** to rules like `no-deprecated` can use type info from `tsconfig.json`.
+   `parser` and `parserOptions` enables **typed linting** so rules like `no-deprecated` can use type info from `tsconfig.json`.
 
 ## What is Typed Linting?
 

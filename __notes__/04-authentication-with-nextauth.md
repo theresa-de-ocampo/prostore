@@ -56,8 +56,6 @@ ReferenceError: window is not defined
 Error: Attempted to call signIn() from the server but signIn is on the client. It's not possible to invoke a client function from the server, it can only be rendered as a Component or passed to props of a Client Component.
 ```
 
-This was fixed by migrating NextAuth to Beta version.
-
 ## 4.4. Sign Out
 
 At `user-button.tsx`, if you try to directly use the `signOut` function from `NextAuth(config)`, it will throw an error.
@@ -129,7 +127,7 @@ update();
 - `session` contains the partial session fields being updated. In this case, its value would only be `{ name: Harry }`.
 - It is not the full session.
 - It is not the session sent to the client.
-- You usually use to merge new/updated fields into the JWT.
+- You usually use it to merge new/updated fields into the JWT.
 
 Note that at this point — when you call `update()` — the `user` argument of the `jwt` callback will be `undefined` since it is only the response returned from the `authorize` callback.
 

@@ -51,7 +51,18 @@ const body = new URLSearchParams();
 body.set("grant_type", "client_credentials");
 ```
 
-## 8.3. Set-Up Jest
+## 8.3. PayPal Set-Up
+
+Unlike the payment architectures you've built before, this one is not event-driven and it doesn't make use of webhooks.
+
+It follows a Request/Response pattern where:
+
+1. The PayPal button mounts in [paypal-payment.tsx](../components/shared/payment/paypal-payment.tsx).
+2. On click, it calls `createPayPalOrder(order.id)`. The returned PayPal order ID is saved into the DB as `paymentResult.id` at [order.actions.ts](../lib/actions/order.actions.ts).
+3. After the buyer approves in the PayPal pop-up, the PayPal JS SDK invokes `onApprove`.
+4. `approvePayPalOrder` looks up the the local order, reads the stored PayPal order ID, and calls `payPal.capturePayment(payPalOrderId)`.
+
+## 8.4. Set-Up Jest
 
 1. Install the following: `npm i -D jest ts-jest ts-node @types/jest @types/node dotenv`.
 2. Run `npm init jest@latest`
@@ -64,17 +75,17 @@ body.set("grant_type", "client_credentials");
 
 When using Next.js, the `dotenv` package is not needed. Next.js automatically imports the environment variables from `.env` or `.env.local` files.
 
-Install `dotenv` only if you have **standalone Node scripts** that rune _outside_ Next.js.
+Install `dotenv` only if you have **standalone Node scripts** that run _outside_ Next.js.
 
 - Prisma Seed Scripts
 - Custom CLI
 - Jest - test files will not be run within Next.js, so there's no access to `process.env`. In this case, the `dotenv` package is needed to recognize the `.env` files.
 
-## 8.4. Request Body of `fetch`
+## 8.5. Request Body of `fetch`
 
 Take a look at the request body for creating an order, it's wrapped in `JSON.stringify`. Note that `fetch` only accepts **strings** (not objects) as the HTTP body.
 
-## 8.5. Jest's `mock` vs `spyOn`
+## 8.6. Jest's `mock` vs `spyOn`
 
 <table>
   <thead>
@@ -170,11 +181,11 @@ jest.mock("./models/user");
 
 Read more from [Jest Docs](https://jestjs.io/docs/manual-mocks).
 
-## 8.6. `purchase_units`
+## 8.7. `purchase_units`
 
 The value set at `purchase_units` represent the total price of the cart instead of creating a price breakdown per order item. The following lists scenarios when `purchase_units` > 1 actually makes sense:
 
-### 8.6.1. MarketPlace
+### 8.7.1. MarketPlace
 
 This is useful for a marketplace like SM Eats where:
 
@@ -212,7 +223,7 @@ This is useful for a marketplace like SM Eats where:
 }
 ```
 
-### 8.6.2. Partial Capture / Staged Fullfillments
+### 8.7.2. Partial Capture / Staged Fullfillments
 
 This is useful when you to track shipping separately where:
 
