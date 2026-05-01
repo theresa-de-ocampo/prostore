@@ -61,7 +61,7 @@ The function was called on server components which made use of the server's time
 
 ### `SameSite=Lax`
 
-`SameSite=Lax` tells the browser to withhold the cookie on most cross-site requests while still sending it on top-level navigations like clicking a link. It's a safer default that `SameSite=None` and helps reduce CSRF risk without breaking normal navigation.
+`SameSite=Lax` tells the browser to withhold the cookie on most cross-site requests while still sending it on top-level navigations like clicking a link. It's a safer default than `SameSite=None` and helps reduce CSRF risk without breaking normal navigation.
 
 ### Example
 

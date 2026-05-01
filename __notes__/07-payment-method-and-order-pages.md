@@ -16,9 +16,38 @@ at [Placed Order Form](<app/(root)/checkout/place-order/place-order-form.tsx>) b
 
 Unlike with the [Sign-Up Form](<app/(auth)/sign-up/sign-up-form.tsx>), `useActionState` was used since NextAuth already took care of the redirect on `success`.
 
-Note that `useFormStatus` can run both on client and server components. On the other hand, `useActionState` can only run on the client.
+## 7.2. Common Pitfall with `useFormStatus`
 
-## 7.2. Why is `convertToPlainObject` unnecessary?
+`useFormStatus` will only return status information for a parent `<form>`. That is, the hook must run in a descendant of the form, not in the same component that creates the form.
+
+`useFormStatus` is tied to the nearest parent form submission submission state, either from `<form action={...}>` or `<form onSubmit={...}>`.
+
+```jsx
+export default function PlaceOrderForm() {
+  const router = useRouter();
+  const { pending } = useFormStatus(); // 🚩 `pending` will never be true
+
+  async function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const response = await createOrder();
+
+    if (response.redirectTo) {
+      router.push(response.redirectTo);
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="w-full">
+      <Button type="submit" disabled={pending} className="w-full">
+        {pending && <Spinner />} Place Order
+      </Button>
+    </form>
+  );
+}
+```
+
+## 7.3. Why is `convertToPlainObject` unnecessary?
 
 It's supposed to convert a Prisma object into a regular JavaScript object.
 

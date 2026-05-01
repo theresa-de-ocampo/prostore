@@ -2,7 +2,7 @@
 
 ## Updating Sessions
 
-Initially, [UserButton](../components/shared/header/user-button.tsx) was changed to be client-driven so it updates instantly without needing a route refresh.
+Initially, [UserButton](../components/shared/header/user-button.tsx) was changed to be client-driven so it updates instantly without needing a route refresh when updating the name from the [profile page](https://prostore-iota-neon.vercel.app/user/profile).
 
 ```javascript
 const { data: session } = useSession();
