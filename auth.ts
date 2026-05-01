@@ -127,7 +127,7 @@ export const config = {
       if (!auth && protectedPaths.some((p) => pathname.startsWith(p))) {
         response = false;
       } else if (auth?.user.role !== "admin" && pathname.startsWith("/admin")) {
-        response = NextResponse.redirect(new URL(origin));
+        response = NextResponse.redirect(new URL("/unauthorized", origin));
       } else if (!request.cookies.get("sessionCartId")) {
         const sessionCartId = crypto.randomUUID();
         response = NextResponse.next();

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { auth } from "@/auth";
 
 // * Lib
 import { formatCurrency, formatDateTime, formatNumber } from "@/lib/utils";
@@ -30,12 +29,6 @@ export const metadata: Metadata = {
 };
 
 export default async function OverviewPage() {
-  const session = await auth();
-
-  if (session?.user.role !== "admin") {
-    throw new Error("User is not authorized");
-  }
-
   const summary = await getExecutiveSummary();
 
   return (
