@@ -49,6 +49,13 @@ export default function PlaceOrderForm() {
 
 ## 7.3. Why is `convertToPlainObject` unnecessary?
 
+```
+// Convert a Prisma object into a regular JavaScript object
+export function convertToPlainObject<T>(value: T): T {
+  return JSON.parse(JSON.stringify(value));
+}
+```
+
 It's supposed to convert a Prisma object into a regular JavaScript object.
 
 But the function signature is `convertToPlainObject<T>(value: T): T`, so TypeScript still thinks the return type is the original Prisma type (`Decimal`, `Date`, etc.).

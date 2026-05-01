@@ -12,20 +12,22 @@ export async function getExecutiveSummary() {
     }
   });
 
-  const totalSales = await prisma.order.aggregate({
+  const totalSalesRaw = await prisma.order.aggregate({
     _sum: { totalPrice: true }
   });
+
+  const totalSales = Number(totalSalesRaw._sum.totalPrice);
 
   const salesDataRaw = await prisma.$queryRaw<
     Array<{ month: string; totalSales: Prisma.Decimal }>
   >`
     SELECT
-      to_char("createdAt", "MM/YY") AS "month"
+      to_char("createdAt", 'MM/YY') AS "month",
       SUM("totalPrice") AS "totalSales"
     FROM
       "Order"
     GROUP BY
-      to_char("createdAt", "MM/YY")
+      to_char("createdAt", 'MM/YY')
   `;
 
   const salesData = salesDataRaw.map((record) => ({
