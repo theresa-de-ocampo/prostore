@@ -99,7 +99,7 @@ export default async function OverviewPage() {
                 <TableRow>
                   <TableHead>BUYER</TableHead>
                   <TableHead>DATE</TableHead>
-                  <TableHead>TOTAL</TableHead>
+                  <TableHead>TOTAL ($)</TableHead>
                   <TableHead>DETAILS</TableHead>
                 </TableRow>
               </TableHeader>
@@ -110,10 +110,16 @@ export default async function OverviewPage() {
                     <TableCell>
                       {formatDateTime(order.createdAt).shortDateOnly}
                     </TableCell>
-                    <TableCell>{formatCurrency(order.totalPrice)}</TableCell>
-                    <TableCell className="text-sm text-center">
-                      <Link href={`/order/${order.id}`} target="_blank">
-                        <ExternalLinkIcon />
+                    <TableCell className="text-right">
+                      {formatNumber(order.totalPrice)}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <Link
+                        href={`/order/${order.id}`}
+                        target="_blank"
+                        className="flex-center"
+                      >
+                        <ExternalLinkIcon className="size-5" />
                       </Link>
                     </TableCell>
                   </TableRow>
