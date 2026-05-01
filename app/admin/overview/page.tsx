@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import { auth } from "@/auth";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+// * Lib
+import { formatCurrency, formatDateTime, formatNumber } from "@/lib/utils";
 import { getExecutiveSummary } from "@/lib/actions/admin.action";
+
+// * Components
+import Charts from "./charts";
+import Link from "next/link";
 import {
   BadgeDollarSignIcon,
   CreditCardIcon,
@@ -8,8 +15,7 @@ import {
   UsersIcon,
   ExternalLinkIcon
 } from "lucide-react";
-import type { Metadata } from "next";
-import { formatCurrency, formatDateTime, formatNumber } from "@/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableHead,
@@ -18,7 +24,6 @@ import {
   TableRow,
   TableCell
 } from "@/components/ui/table";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard"
@@ -87,7 +92,9 @@ export default async function OverviewPage() {
           <CardHeader>
             <CardTitle>Overview</CardTitle>
           </CardHeader>
-          <CardContent>TO DO</CardContent>
+          <CardContent>
+            <Charts salesData={summary.salesData} />
+          </CardContent>
         </Card>
         <Card className="lg:col-span-2">
           <CardHeader>
