@@ -4,19 +4,19 @@ import { Input } from "@/components/ui/input";
 export default function AdminNav() {
   const links = [
     {
-      title: "Overview",
+      label: "Overview",
       href: "/admin/overview"
     },
     {
-      title: "Products",
+      label: "Products",
       href: "/admin/products"
     },
     {
-      title: "Orders",
+      label: "Orders",
       href: "/admin/orders"
     },
     {
-      title: "Users",
+      label: "Users",
       href: "/admin/users"
     }
   ];

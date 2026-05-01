@@ -8,7 +8,7 @@ export default function NavigationMenu({
   links,
   className
 }: {
-  links: Array<{ title: string; href: string }>;
+  links: Array<{ label: string; href: string }>;
   className?: string;
 }) {
   const pathname = usePathname();
@@ -28,7 +28,7 @@ export default function NavigationMenu({
               isActive && "border-foreground text-foreground"
             )}
           >
-            {item.title}
+            {item.label}
           </Link>
         );
       })}

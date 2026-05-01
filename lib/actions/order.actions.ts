@@ -284,3 +284,39 @@ export async function getMyOrders({
     totalPages: Math.ceil(dataCount / limit)
   };
 }
+
+export async function getOrders({
+  page,
+  limit = 10
+}: {
+  page: number;
+  limit?: number;
+}) {
+  const session = await auth();
+
+  if (session?.user.role !== "admin") {
+    throw new Error("Unauthorized Access");
+  }
+
+  const data = await prisma.order.findMany({
+    orderBy: {
+      createdAt: "desc"
+    },
+    take: limit,
+    skip: (page - 1) * limit,
+    include: {
+      user: {
+        select: {
+          name: true
+        }
+      }
+    }
+  });
+
+  const dataCount = await prisma.order.count();
+
+  return {
+    data,
+    totalPages: Math.ceil(dataCount / limit)
+  };
+}
