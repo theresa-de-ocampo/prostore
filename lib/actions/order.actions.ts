@@ -320,3 +320,35 @@ export async function getOrders({
     totalPages: Math.ceil(dataCount / limit)
   };
 }
+
+export async function deleteOrder(orderId: string) {
+  let response;
+
+  try {
+    const session = await auth();
+
+    if (session?.user.role !== "admin") {
+      throw new Error("Unauthorized");
+    }
+
+    await prisma.order.delete({
+      where: {
+        id: orderId
+      }
+    });
+
+    revalidatePath("/admin/orders");
+
+    response = {
+      success: true,
+      message: "Order was successfully deleted."
+    };
+  } catch (error) {
+    response = {
+      success: false,
+      message: formatError(error)
+    };
+  }
+
+  return response;
+}

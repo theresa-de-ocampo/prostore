@@ -1,9 +1,12 @@
 import Link from "next/link";
-import { formatId, formatDateTime } from "@/lib/utils";
-import { getTimeZone } from "@/lib/server/timezone";
 import type { Metadata } from "next";
 
 // * Components
+import DeleteDialog from "@/components/shared/delete-dialog";
+import Pagination from "@/components/shared/pagination";
+import PageState from "@/components/shared/page-state";
+import { Button } from "@/components/ui/button";
+import { ExternalLinkIcon } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -12,11 +15,13 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
-import Pagination from "@/components/shared/pagination";
-import PageState from "@/components/shared/page-state";
 
 // * Actions
-import { getOrders } from "@/lib/actions/order.actions";
+import { getOrders, deleteOrder } from "@/lib/actions/order.actions";
+
+// * Lib
+import { formatId, formatDateTime } from "@/lib/utils";
+import { getTimeZone } from "@/lib/server/timezone";
 
 export const metadata: Metadata = {
   title: "Orders"
@@ -73,8 +78,13 @@ export default async function OrdersPage({
               <TableCell className="text-center">
                 {order.isDelivered ? "Delivered" : "Not Delivered"}
               </TableCell>
-              <TableCell className="text-center">
-                <Link href={`/order/${order.id}`}>Details</Link>
+              <TableCell className="flex-center gap-1">
+                <Button asChild variant="outline">
+                  <Link href={`/order/${order.id}`} target="_blank">
+                    <ExternalLinkIcon />
+                  </Link>
+                </Button>
+                <DeleteDialog id={order.id} action={deleteOrder} />
               </TableCell>
             </TableRow>
           ))}
