@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 // * Lib
 import { formatCurrency, formatDateTime, formatNumber } from "@/lib/utils";
-import { getExecutiveSummary } from "@/lib/actions/admin.action";
+import { getExecutiveSummary } from "@/lib/actions/admin/dashboard.actions";
 
 // * Components
 import Charts from "./charts";

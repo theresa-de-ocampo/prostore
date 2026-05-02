@@ -10,7 +10,7 @@ import PayPalLoading from "./paypal-loading";
 import {
   createPayPalOrder,
   approvePayPalOrder
-} from "@/lib/actions/order.actions";
+} from "@/lib/actions/payment.actions";
 
 // * Types
 import { OrderRecord } from "@/types";

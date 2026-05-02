@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/table";
 
 // * Actions
-import { getOrders, deleteOrder } from "@/lib/actions/order.actions";
+import { getOrders, deleteOrder } from "@/lib/actions/admin/order.actions";
 
 // * Lib
 import { formatId, formatDateTime } from "@/lib/utils";
