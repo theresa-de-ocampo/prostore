@@ -75,6 +75,10 @@ export async function markOrderAsPaid(orderId: string) {
   try {
     await requireAdmin();
     await updateOrderToPaid(orderId);
+
+    revalidatePath(`/order/${orderId}`);
+    revalidatePath("/admin/orders");
+
     response = {
       success: true,
       message: "Order was successfully marked as paid."
@@ -115,6 +119,8 @@ export async function markOrderAsDelivered(orderId: string) {
     });
 
     revalidatePath(`/order/${orderId}`);
+    revalidatePath("/admin/orders");
+
     response = {
       success: true,
       message: "Order was successfully marked as delivered."
