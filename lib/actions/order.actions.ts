@@ -12,6 +12,9 @@ import { getUserById } from "./user.actions";
 import { formatError, RedirectableError } from "../utils";
 import { orderItemSchema, orderRecord, orderSchema } from "../validators";
 
+// * Types
+import type { PaymentResult } from "@/types";
+
 export async function createOrder() {
   let response;
 
@@ -175,4 +178,41 @@ export async function getMyOrders({
     data,
     totalPages: Math.ceil(dataCount / limit)
   };
+}
+
+export async function updateOrderToPaid(
+  orderId: string,
+  paymentResult?: PaymentResult
+) {
+  const order = await getOrderById(orderId);
+
+  if (!order) {
+    throw new Error("Order not found.");
+  }
+
+  if (order.isPaid) {
+    throw new Error("Order is already paid");
+  }
+
+  return await prisma.$transaction(async (tx) => {
+    for (const item of order.orderItems) {
+      await tx.product.update({
+        where: {
+          id: item.productId
+        },
+        data: {
+          stock: { increment: -item.quantity }
+        }
+      });
+    }
+
+    return await tx.order.update({
+      where: { id: orderId },
+      data: {
+        isPaid: true,
+        paidAt: new Date(),
+        paymentResult
+      }
+    });
+  });
 }

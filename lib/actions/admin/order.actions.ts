@@ -3,6 +3,9 @@
 import { prisma } from "@/db/prisma";
 import { revalidatePath } from "next/cache";
 
+// * Actions
+import { getOrderById, updateOrderToPaid } from "../order.actions";
+
 // * Helpers
 import { formatError } from "@/lib/utils";
 import { requireAdmin } from "@/lib/auth-guard";
@@ -55,6 +58,66 @@ export async function deleteOrder(orderId: string) {
     response = {
       success: true,
       message: "Order was successfully deleted."
+    };
+  } catch (error) {
+    response = {
+      success: false,
+      message: formatError(error)
+    };
+  }
+
+  return response;
+}
+
+export async function markOrderAsPaid(orderId: string) {
+  let response;
+
+  try {
+    await requireAdmin();
+    await updateOrderToPaid(orderId);
+    response = {
+      success: true,
+      message: "Order was successfully marked as paid."
+    };
+  } catch (error) {
+    response = {
+      success: false,
+      message: formatError(error)
+    };
+  }
+
+  return response;
+}
+
+export async function markOrderAsDelivered(orderId: string) {
+  let response;
+
+  try {
+    await requireAdmin();
+    const order = await getOrderById(orderId);
+
+    if (!order) {
+      throw new Error("Order not found.");
+    }
+
+    if (!order.isPaid) {
+      throw new Error("Order is not paid.");
+    }
+
+    await prisma.order.update({
+      where: {
+        id: orderId
+      },
+      data: {
+        isDelivered: true,
+        deliveredAt: new Date()
+      }
+    });
+
+    revalidatePath(`/order/${orderId}`);
+    response = {
+      success: true,
+      message: "Order was successfully marked as delivered."
     };
   } catch (error) {
     response = {

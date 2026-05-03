@@ -4,7 +4,7 @@ import { prisma } from "@/db/prisma";
 import { revalidatePath } from "next/cache";
 
 // * Actions
-import { getOrderById } from "./order.actions";
+import { getOrderById, updateOrderToPaid } from "./order.actions";
 
 // * Helpers
 import { formatError } from "../utils";
@@ -69,38 +69,22 @@ export async function approvePayPalOrder(orderId: string) {
     const payPalOrderId = order.paymentResult.id;
     const capturedPayment = await payPal.capturePayment(payPalOrderId);
 
-    if (capturedPayment?.id !== payPalOrderId) {
+    if (
+      capturedPayment?.id !== payPalOrderId ||
+      capturedPayment.status !== "COMPLETED"
+    ) {
       throw new Error("Error in PayPal Payment");
     }
 
-    const updatedOrder = await prisma.$transaction(async (tx) => {
-      for (const item of order.orderItems) {
-        await tx.product.update({
-          where: {
-            id: item.productId
-          },
-          data: {
-            stock: { increment: -item.quantity }
-          }
-        });
-      }
+    const paymentResult = {
+      id: capturedPayment.id,
+      status: capturedPayment.status,
+      email: capturedPayment.payer.email_address,
+      pricePaid:
+        capturedPayment.purchase_units[0]?.payments?.captures[0]?.amount?.value
+    };
 
-      return await tx.order.update({
-        where: { id: orderId },
-        data: {
-          isPaid: true,
-          paidAt: new Date(),
-          paymentResult: {
-            id: capturedPayment.id,
-            status: capturedPayment.status,
-            email: capturedPayment.payer.email_address,
-            pricePaid:
-              capturedPayment.purchase_units[0]?.payments?.captures[0]?.amount
-                ?.value
-          }
-        }
-      });
-    });
+    const updatedOrder = await updateOrderToPaid(orderId, paymentResult);
 
     if (!updatedOrder) {
       throw new Error("Order was not set to paid.");
