@@ -12,8 +12,8 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
+import PageState from "@/components/shared/page-state";
 import Pagination from "@/components/shared/pagination";
-import EmptyOrderList from "./empty-order-list";
 
 // * Actions
 import { getMyOrders } from "@/lib/actions/order.actions";
@@ -33,7 +33,12 @@ export default async function OrdersPage(props: {
   });
 
   if (orders.data.length === 0) {
-    return <EmptyOrderList />;
+    return (
+      <PageState
+        title="Empty Order List"
+        link={{ label: "View Products", href: "/" }}
+      />
+    );
   }
 
   return (

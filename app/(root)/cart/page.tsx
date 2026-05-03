@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { getCartCookie, getCart } from "@/lib/actions/cart.actions";
 
 // * Components
+import PageState from "@/components/shared/page-state";
 import ShoppingCart from "./cart";
-import EmptyCart from "./empty-cart";
 
 export const metadata: Metadata = {
   title: "Cart"
@@ -19,7 +19,10 @@ export default async function CartPage() {
       {cart && cart.items.length > 0 ? (
         <ShoppingCart cart={cart} />
       ) : (
-        <EmptyCart />
+        <PageState
+          title="Empty Cart"
+          link={{ label: "View Products", href: "/" }}
+        />
       )}
     </section>
   );
