@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { formatId, formatDateTime } from "@/lib/utils";
-import { getTimeZone } from "@/lib/server/timezone";
 import type { Metadata } from "next";
 
 // * Components
@@ -17,6 +15,10 @@ import Pagination from "@/components/shared/pagination";
 
 // * Actions
 import { getMyOrders } from "@/lib/actions/order.actions";
+
+// * Lib
+import { formatId, formatDateTime, formatCurrency } from "@/lib/utils";
+import { getTimeZone } from "@/lib/server/timezone";
 
 export const metadata: Metadata = {
   title: "My Orders"
@@ -62,7 +64,7 @@ export default async function OrdersPage(props: {
               <TableCell>
                 {formatDateTime(order.createdAt, timeZone).dateTime}
               </TableCell>
-              <TableCell>${order.totalPrice}</TableCell>
+              <TableCell>{formatCurrency(order.totalPrice)}</TableCell>
               <TableCell>
                 {order.paidAt
                   ? formatDateTime(order.paidAt, timeZone).dateTime

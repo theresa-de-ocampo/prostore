@@ -12,6 +12,9 @@ import { Spinner } from "@/components/ui/spinner";
 import { Cart } from "@/types";
 import { TransitionStartFunction } from "react";
 
+// * Utils
+import { formatCurrency } from "@/lib/utils";
+
 export default function CartSummary({
   cart,
   transition
@@ -35,7 +38,7 @@ export default function CartSummary({
               )}
               )
             </span>
-            <span className="font-bold">${cart.itemsPrice}</span>
+            <span className="font-bold">{formatCurrency(cart.itemsPrice)}</span>
           </p>
         </CardContent>
         <CardFooter>
