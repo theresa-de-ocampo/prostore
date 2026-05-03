@@ -14,13 +14,24 @@ import { PAYMENT_METHOD } from "@/lib/constants";
 
 export default async function PriceSummary({ order }: { order: OrderRecord }) {
   const { itemsPrice, shippingPrice, taxPrice, totalPrice } = order;
-  const payPalClientId = process.env.PAYPAL_CLIENT_ID;
-  const session = await auth();
-  const isAdmin = session?.user.role === "admin";
 
+  const payPalClientId = process.env.PAYPAL_CLIENT_ID;
   if (!payPalClientId) {
     throw new Error("PayPal client ID is required.");
   }
+
+  const session = await auth();
+  const isAdmin = session?.user.role === "admin";
+  const showPayPalPayment =
+    !order.isPaid && order.paymentMethod === PAYMENT_METHOD.PAYPAL;
+  const showMarkAsPaidButton =
+    isAdmin &&
+    !order.isPaid &&
+    order.paymentMethod === PAYMENT_METHOD.CASH_ON_DELIVERY;
+  const showMarkAsDeliveredButton =
+    isAdmin && order.isPaid && !order.isDelivered;
+  const showFooter =
+    showPayPalPayment || showMarkAsPaidButton || showMarkAsDeliveredButton;
 
   return (
     <Card>
@@ -42,20 +53,17 @@ export default async function PriceSummary({ order }: { order: OrderRecord }) {
           <div>${totalPrice}</div>
         </div>
       </CardContent>
-
-      <CardFooter>
-        {!order.isPaid && order.paymentMethod === PAYMENT_METHOD.PAYPAL && (
-          <PayPalPayment order={order} clientId={payPalClientId} />
-        )}
-        {isAdmin &&
-          !order.isPaid &&
-          order.paymentMethod === PAYMENT_METHOD.CASH_ON_DELIVERY && (
-            <MarkAsPaidButton orderId={order.id} />
+      {showFooter && (
+        <CardFooter>
+          {showPayPalPayment && (
+            <PayPalPayment order={order} clientId={payPalClientId} />
           )}
-        {isAdmin && order.isPaid && !order.isDelivered && (
-          <MarkAsDeliveredButton orderId={order.id} />
-        )}
-      </CardFooter>
+          {showMarkAsPaidButton && <MarkAsPaidButton orderId={order.id} />}
+          {showMarkAsDeliveredButton && (
+            <MarkAsDeliveredButton orderId={order.id} />
+          )}
+        </CardFooter>
+      )}
     </Card>
   );
 }
