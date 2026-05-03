@@ -80,7 +80,7 @@ export default async function OrdersPage({
               </TableCell>
               <TableCell className="flex-center gap-1">
                 <Button asChild variant="outline">
-                  <Link href={`/order/${order.id}`} target="_blank">
+                  <Link href={`/order/${order.id}`}>
                     <ExternalLinkIcon />
                   </Link>
                 </Button>

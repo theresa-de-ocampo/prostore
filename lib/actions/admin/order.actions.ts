@@ -77,7 +77,6 @@ export async function markOrderAsPaid(orderId: string) {
     await updateOrderToPaid(orderId);
 
     revalidatePath(`/order/${orderId}`);
-    revalidatePath("/admin/orders");
 
     response = {
       success: true,
@@ -119,7 +118,6 @@ export async function markOrderAsDelivered(orderId: string) {
     });
 
     revalidatePath(`/order/${orderId}`);
-    revalidatePath("/admin/orders");
 
     response = {
       success: true,

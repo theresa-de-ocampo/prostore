@@ -53,3 +53,18 @@ There are three main players, all of which operates in the server.
   </tbody>
 </table>
 
+## 20.3. [`revalidatePath`](https://nextjs.org/docs/app/api-reference/functions/revalidatePath#:~:text=Invalidates%20the%20specific%20page)
+
+`revalidatePath` invalidates the cache for that specific page only, and updates the UI immediately if viewing the affected path.
+
+### Wrong Mental Model
+
+Initially, you thought that it worked like TanStack Query wherein it would refresh all pages. So you had something like:
+
+```javascript
+// admin/order.actions.ts
+revalidatePath(`/order/${orderId}`);
+revalidatePath("/admin/orders");
+```
+
+where `/admin/orders` had a link that opens `/order/${orderId}` on a new tab. On order edit at `/order/${orderId}`, you expected that the previously opened `/admin/orders` would also be refreshed.
