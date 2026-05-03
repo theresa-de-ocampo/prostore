@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
 // * Types
+import type { Metadata } from "next";
 import { ShippingAddress } from "@/types";
 
 // * Actions
@@ -10,7 +11,7 @@ import { getUserById } from "@/lib/actions/user.actions";
 // * Components
 import ShippingAddressForm from "./shipping-address-form";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Shipping Address"
 };
 

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
 // * Constants
@@ -17,7 +18,7 @@ import SignUpForm from "./sign-up-form";
 
 import { auth } from "@/auth";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Sign Up"
 };
 

@@ -1,11 +1,14 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getOrderById } from "@/lib/actions/order.actions";
-import { formatId } from "@/lib/utils";
 
 // * Components
 import OrderDetails from "./order-details";
 
-export const metadata = {
+// * Lib
+import { getOrderById } from "@/lib/actions/order.actions";
+import { formatId } from "@/lib/utils";
+
+export const metadata: Metadata = {
   title: "Order Details"
 };
 

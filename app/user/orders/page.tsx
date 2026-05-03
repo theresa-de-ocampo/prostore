@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { formatId, formatDateTime } from "@/lib/utils";
 import { getTimeZone } from "@/lib/server/timezone";
+import type { Metadata } from "next";
 
 // * Components
 import {
@@ -17,7 +18,7 @@ import EmptyOrderList from "./empty-order-list";
 // * Actions
 import { getMyOrders } from "@/lib/actions/order.actions";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "My Orders"
 };
 

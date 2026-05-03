@@ -27,9 +27,10 @@ import { getCart, getCartCookie } from "@/lib/actions/cart.actions";
 import { getUserById } from "@/lib/actions/user.actions";
 
 // * Types
+import type { Metadata } from "next";
 import { ShippingAddress } from "@/types";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Place Order"
 };
 

@@ -1,10 +1,11 @@
+import type { Metadata } from "next";
 import { getCartCookie, getCart } from "@/lib/actions/cart.actions";
 
 // * Components
 import ShoppingCart from "./cart";
 import EmptyCart from "./empty-cart";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Cart"
 };
 

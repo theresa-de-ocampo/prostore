@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { auth } from "@/auth";
 import { getUserById } from "@/lib/actions/user.actions";
 
@@ -5,7 +6,7 @@ import { getUserById } from "@/lib/actions/user.actions";
 import PaymentMethodForm from "./payment-method-form";
 import { PAYMENT_METHOD } from "@/lib/constants";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Payment Method"
 };
 
