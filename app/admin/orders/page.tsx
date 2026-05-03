@@ -55,6 +55,7 @@ export default async function OrdersPage({
         <TableHeader>
           <TableRow>
             <TableHead>ID</TableHead>
+            <TableHead>NAME</TableHead>
             <TableHead>DATE</TableHead>
             <TableHead>TOTAL</TableHead>
             <TableHead>PAID</TableHead>
@@ -66,6 +67,7 @@ export default async function OrdersPage({
           {orders.data.map((order) => (
             <TableRow key={order.id}>
               <TableCell>{formatId(order.id)}</TableCell>
+              <TableCell>{order.user.name}</TableCell>
               <TableCell>
                 {formatDateTime(order.createdAt, timeZone).dateTime}
               </TableCell>
