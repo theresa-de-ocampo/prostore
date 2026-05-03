@@ -15,11 +15,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Convert a Prisma object into a regular JavaScript object
-export function convertToPlainObject<T>(value: T): T {
-  return JSON.parse(JSON.stringify(value));
-}
-
 // TODO. Handle round-offs.
 export function formatDecimal(value: string, digits = 2): string {
   const [wholeNumber, fractionalPart = ""] = value.split(".");
@@ -35,6 +30,24 @@ export function round(value: number | string): number {
   }
 
   return Math.round((number + Number.EPSILON) * 100) / 100;
+}
+
+const CURRENCY_FORMATTER = new Intl.NumberFormat("en-US", {
+  currency: "USD",
+  style: "currency",
+  minimumFractionDigits: 2
+});
+
+export function formatCurrency(amount: number | string) {
+  const value = typeof amount === "string" ? parseFloat(amount) : amount;
+  return CURRENCY_FORMATTER.format(value);
+}
+
+const NUMBER_FORMATTER = new Intl.NumberFormat("en-us");
+
+export function formatNumber(n: number | string) {
+  const number = typeof n === "string" ? parseFloat(n) : n;
+  return NUMBER_FORMATTER.format(number);
 }
 
 export function sleep(ms: number) {
@@ -102,6 +115,12 @@ export function formatDateTime(
     day: "numeric"
   };
 
+  const shortDateOptions: Intl.DateTimeFormatOptions = {
+    month: "short",
+    year: "numeric",
+    day: "numeric"
+  };
+
   const timeOptions: Intl.DateTimeFormatOptions = {
     hour: "numeric",
     minute: "numeric",
@@ -130,11 +149,13 @@ export function formatDateTime(
 
   const formattedDateTime = formatWithFallback(dateTimeOptions);
   const formattedDate = formatWithFallback(dateOptions);
+  const formattedShortDate = formatWithFallback(shortDateOptions);
   const formattedTime = formatWithFallback(timeOptions);
 
   return {
     dateTime: formattedDateTime,
     dateOnly: formattedDate,
+    shortDateOnly: formattedShortDate,
     timeOnly: formattedTime
   };
 }

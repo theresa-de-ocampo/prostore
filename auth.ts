@@ -121,10 +121,13 @@ export const config = {
       let response: NextResponse<unknown> | boolean = true;
 
       const protectedPaths = ["/checkout", "/admin", "/user"];
-      const { pathname } = request.nextUrl;
+
+      const { pathname, origin } = request.nextUrl;
 
       if (!auth && protectedPaths.some((p) => pathname.startsWith(p))) {
         response = false;
+      } else if (auth?.user.role !== "admin" && pathname.startsWith("/admin")) {
+        response = NextResponse.redirect(new URL("/unauthorized", origin));
       } else if (!request.cookies.get("sessionCartId")) {
         const sessionCartId = crypto.randomUUID();
         response = NextResponse.next();

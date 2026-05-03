@@ -127,6 +127,11 @@
   h3 {
     @apply font-bold text-lg lg:text-xl;
   }
+
+  button:not([disabled]),
+  [role="button"]:not([disabled]) {
+    cursor: pointer;
+  }
 }
 
 @utility wrapper {
