@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
 // * Constants
@@ -15,9 +17,7 @@ import {
 } from "@/components/ui/card";
 import CredentialsSignInForm from "./credentials-sign-in-form";
 
-import { auth } from "@/auth";
-
-export const metadata = {
+export const metadata: Metadata = {
   title: "Sign In"
 };
 

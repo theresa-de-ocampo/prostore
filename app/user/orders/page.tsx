@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { formatId, formatDateTime } from "@/lib/utils";
-import { getTimeZone } from "@/lib/server/timezone";
+import type { Metadata } from "next";
 
 // * Components
 import {
@@ -11,13 +10,17 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table";
+import PageState from "@/components/shared/page-state";
 import Pagination from "@/components/shared/pagination";
-import EmptyOrderList from "./empty-order-list";
 
 // * Actions
 import { getMyOrders } from "@/lib/actions/order.actions";
 
-export const metadata = {
+// * Lib
+import { formatId, formatDateTime, formatCurrency } from "@/lib/utils";
+import { getTimeZone } from "@/lib/server/timezone";
+
+export const metadata: Metadata = {
   title: "My Orders"
 };
 
@@ -32,7 +35,12 @@ export default async function OrdersPage(props: {
   });
 
   if (orders.data.length === 0) {
-    return <EmptyOrderList />;
+    return (
+      <PageState
+        title="Empty Order List"
+        link={{ label: "View Products", href: "/" }}
+      />
+    );
   }
 
   return (
@@ -56,7 +64,7 @@ export default async function OrdersPage(props: {
               <TableCell>
                 {formatDateTime(order.createdAt, timeZone).dateTime}
               </TableCell>
-              <TableCell>${order.totalPrice}</TableCell>
+              <TableCell>{formatCurrency(order.totalPrice)}</TableCell>
               <TableCell>
                 {order.paidAt
                   ? formatDateTime(order.paidAt, timeZone).dateTime

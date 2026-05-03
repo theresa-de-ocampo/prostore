@@ -1,4 +1,4 @@
-import { generateAccessToken, payPal } from "../lib/paypal";
+import { generateAccessToken, payPal } from "../lib/server/paypal";
 
 test("generates token from paypal", async () => {
   const response = await generateAccessToken();

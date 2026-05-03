@@ -22,6 +22,9 @@ import QuantityControls from "@/components/shared/cart/quantity-controls";
 // * Actions
 import { addToCart, removeFromCart } from "@/lib/actions/cart.actions";
 
+// * Utils
+import { formatCurrency } from "@/lib/utils";
+
 export default function CartTable({
   cart,
   transition
@@ -57,7 +60,7 @@ export default function CartTable({
         <TableRow>
           <TableHead>Item</TableHead>
           <TableHead className="text-center">Quantity</TableHead>
-          <TableHead className="text-center">Price</TableHead>
+          <TableHead>Price</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -83,7 +86,7 @@ export default function CartTable({
                 isPending={isPending}
               />
             </TableCell>
-            <TableCell>${item.price}</TableCell>
+            <TableCell>{formatCurrency(item.price)}</TableCell>
           </TableRow>
         ))}
       </TableBody>

@@ -20,7 +20,7 @@ import {
 import { getOrders, deleteOrder } from "@/lib/actions/admin/order.actions";
 
 // * Lib
-import { formatId, formatDateTime } from "@/lib/utils";
+import { formatId, formatDateTime, formatCurrency } from "@/lib/utils";
 import { getTimeZone } from "@/lib/server/timezone";
 
 export const metadata: Metadata = {
@@ -55,6 +55,7 @@ export default async function OrdersPage({
         <TableHeader>
           <TableRow>
             <TableHead>ID</TableHead>
+            <TableHead>NAME</TableHead>
             <TableHead>DATE</TableHead>
             <TableHead>TOTAL</TableHead>
             <TableHead>PAID</TableHead>
@@ -66,10 +67,11 @@ export default async function OrdersPage({
           {orders.data.map((order) => (
             <TableRow key={order.id}>
               <TableCell>{formatId(order.id)}</TableCell>
+              <TableCell>{order.user.name}</TableCell>
               <TableCell>
                 {formatDateTime(order.createdAt, timeZone).dateTime}
               </TableCell>
-              <TableCell>${order.totalPrice}</TableCell>
+              <TableCell>{formatCurrency(order.totalPrice)}</TableCell>
               <TableCell>
                 {order.paidAt
                   ? formatDateTime(order.paidAt, timeZone).dateTime

@@ -8,7 +8,7 @@ import { getOrderById, updateOrderToPaid } from "./order.actions";
 
 // * Helpers
 import { formatError } from "../utils";
-import { payPal } from "../paypal";
+import { payPal } from "../server/paypal";
 
 export async function createPayPalOrder(orderId: string) {
   let response;

@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { formatCurrency } from "@/lib/utils";
 
 // * Components
 import Link from "next/link";
@@ -27,9 +28,10 @@ import { getCart, getCartCookie } from "@/lib/actions/cart.actions";
 import { getUserById } from "@/lib/actions/user.actions";
 
 // * Types
+import type { Metadata } from "next";
 import { ShippingAddress } from "@/types";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Place Order"
 };
 
@@ -129,9 +131,7 @@ export default async function PlaceOrderPage() {
                         </Link>
                       </TableCell>
                       <TableCell>{item.quantity}</TableCell>
-                      <TableCell className="text-center">
-                        ${item.price}
-                      </TableCell>
+                      <TableCell>{formatCurrency(item.price)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -144,21 +144,23 @@ export default async function PlaceOrderPage() {
             <CardContent>
               <div className="flex-between">
                 <div>Items</div>
-                <div>${cart.itemsPrice}</div>
+                <div>{formatCurrency(cart.itemsPrice)}</div>
               </div>
               <div className="flex-between">
                 <div>Tax</div>
-                <div>${cart.taxPrice}</div>
+                <div>{formatCurrency(cart.taxPrice)}</div>
               </div>
               <div className="flex-between">
                 <div>Shipping</div>
                 <div>
-                  {cart.shippingPrice === "0.00" ? "Free" : cart.shippingPrice}
+                  {cart.shippingPrice === "0.00"
+                    ? "Free"
+                    : formatCurrency(cart.shippingPrice)}
                 </div>
               </div>
               <div className="flex-between font-bold">
                 <div>Total Price</div>
-                <div>${cart.totalPrice}</div>
+                <div>{formatCurrency(cart.totalPrice)}</div>
               </div>
             </CardContent>
             <CardFooter>

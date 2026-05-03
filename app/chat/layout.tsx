@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
+
+// * Components
 import Header from "@/components/shared/header";
 import Footer from "@/components/footer";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Customer Support"
 };
 
