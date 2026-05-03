@@ -14,7 +14,7 @@ export default function ProductImages({ images }: { images: string[] }) {
         alt="Product Image"
         width={700}
         height={700}
-        className="object-contain object-center max-h-[500px]"
+        className="object-contain object-center max-h-125"
       />
       <div className="flex gap-2 mt-2">
         {images.map((image, i) => (
