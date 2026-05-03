@@ -8,7 +8,7 @@ import { getOrderById, updateOrderToPaid } from "../order.actions";
 
 // * Helpers
 import { formatError } from "@/lib/utils";
-import { requireAdmin } from "@/lib/auth-guard";
+import { requireAdmin } from "@/lib/server/auth-guard";
 
 export async function getOrders({
   page,
